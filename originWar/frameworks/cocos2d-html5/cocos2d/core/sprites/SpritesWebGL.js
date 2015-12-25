@@ -30,7 +30,7 @@ cc._tmp.WebGLSprite = function () {
     _p._spriteFrameLoadedCallback = function(spriteFrame){
         this.setNodeDirty(true);
         this.setTextureRect(spriteFrame.getRect(), spriteFrame.isRotated(), spriteFrame.getOriginalSize());
-        this.dispatchEvent("load");
+        this._callLoadedEventCallbacks();
     };
 
     _p.setOpacityModifyRGB = function (modify) {
@@ -63,10 +63,6 @@ cc._tmp.WebGLSprite = function () {
         self._softInit(fileName, rect, rotated);
     };
 
-    _p._initRendererCmd = function(){
-        this._rendererCmd = new cc.TextureRenderCmdWebGL(this);
-    };
-
     _p.setBlendFunc = function (src, dst) {
         var locBlendFunc = this._blendFunc;
         if (dst === undefined) {
@@ -85,6 +81,7 @@ cc._tmp.WebGLSprite = function () {
 
         cc.Node.prototype.init.call(_t);
         _t.dirty = _t._recursiveDirty = false;
+        _t._opacityModifyRGB = true;
 
         _t._blendFunc.src = cc.BLEND_SRC;
         _t._blendFunc.dst = cc.BLEND_DST;
@@ -168,7 +165,7 @@ cc._tmp.WebGLSprite = function () {
                 locRect.width = rect.width;
                 locRect.height = rect.height;
             }
-            texture.addEventListener("load", _t._textureLoadedCallback, _t);
+            texture.addLoadedEventListener(_t._textureLoadedCallback, _t);
             return true;
         }
 
@@ -224,7 +221,7 @@ cc._tmp.WebGLSprite = function () {
         // if the sprite is added to a batchnode, then it will automatically switch to "batchnode Render"
         _t.batchNode = _t._batchNode;
         _t._quadDirty = true;
-        _t.dispatchEvent("load");
+        _t._callLoadedEventCallbacks();
     };
 
     _p.setTextureRect = function (rect, rotated, untrimmedSize) {
@@ -252,8 +249,8 @@ cc._tmp.WebGLSprite = function () {
         } else {
             // self rendering
             // Atlas: Vertex
-            var x1 = _t._offsetPosition.x;
-            var y1 = _t._offsetPosition.y;
+            var x1 = 0 + _t._offsetPosition.x;
+            var y1 = 0 + _t._offsetPosition.y;
             var x2 = x1 + locRect.width;
             var y2 = y1 + locRect.height;
 
@@ -415,14 +412,14 @@ cc._tmp.WebGLSprite = function () {
         var locTextureLoaded = newFrame.textureLoaded();
         if (!locTextureLoaded) {
             _t._textureLoaded = false;
-            newFrame.addEventListener("load", function (sender) {
+            newFrame.addLoadedEventListener(function (sender) {
                 _t._textureLoaded = true;
                 var locNewTexture = sender.getTexture();
                 if (locNewTexture != _t._texture)
                     _t.texture = locNewTexture;
                 _t.setTextureRect(sender.getRect(), sender.isRotated(), sender.getOriginalSize());
 
-                _t.dispatchEvent("load");
+                _t._callLoadedEventCallbacks();
             }, _t);
         }
         // update texture before updating texture rect
@@ -477,13 +474,6 @@ cc._tmp.WebGLSprite = function () {
             //TODO
             var size = texture.getContentSize();
             _t.setTextureRect(cc.rect(0,0, size.width, size.height));
-            //If image isn't loaded. Listen for the load event.
-            if(!texture._isLoaded){
-                texture.addEventListener("load", function(){
-                    var size = texture.getContentSize();
-                    _t.setTextureRect(cc.rect(0,0, size.width, size.height));
-                }, this);
-            }
             return;
         }
         // CCSprite: setTexture doesn't work when the sprite is rendered using a CCSpriteSheet

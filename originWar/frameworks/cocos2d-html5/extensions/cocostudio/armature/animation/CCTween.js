@@ -28,8 +28,6 @@
  * @class
  * @extends ccs.ProcessBase
  *
- * @param {ccs.Bone} The bone to be animated
- *
  * @property {ccs.ArmatureAnimation}    animation   - The animation
  */
 ccs.Tween = ccs.ProcessBase.extend(/** @lends ccs.Tween# */{
@@ -47,11 +45,12 @@ ccs.Tween = ccs.ProcessBase.extend(/** @lends ccs.Tween# */{
     _animation:null,
     _passLastFrame:false,
 
-    ctor:function (bone) {
+    /**
+     * Construction of ccs.Tween.
+     */
+    ctor:function () {
         ccs.ProcessBase.prototype.ctor.call(this);
         this._frameTweenEasing = ccs.TweenType.linear;
-
-        ccs.Tween.prototype.init.call(this, bone);
     },
 
     /**
@@ -67,7 +66,7 @@ ccs.Tween = ccs.ProcessBase.extend(/** @lends ccs.Tween# */{
         this._tweenData = this._bone.getTweenData();
         this._tweenData.displayIndex = -1;
 
-        this._animation = (this._bone != null && this._bone.getArmature() != null) ?
+        this._animation = this._bone.getArmature() != null ?
             this._bone.getArmature().getAnimation() :
             null;
         return true;
@@ -441,8 +440,13 @@ _p = null;
  * Allocates and initializes a ArmatureAnimation.
  * @param {ccs.Bone} bone
  * @return {ccs.Tween}
- * @deprecated since v3.1, please use new construction instead
+ * @example
+ * // example
+ * var animation = ccs.ArmatureAnimation.create();
  */
-ccs.Tween.create = function (bone) {
-    return new ccs.Tween(bone);
+ccs.Tween.create = function (bone) {      //TODO it will be deprecated in v3.1
+    var tween = new ccs.Tween();
+    if (tween && tween.init(bone))
+        return tween;
+    return null;
 };

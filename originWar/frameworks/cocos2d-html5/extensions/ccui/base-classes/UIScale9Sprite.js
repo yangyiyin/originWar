@@ -48,9 +48,6 @@
  * @property {Number}   insetRight      - The right inset of the 9-slice sprite
  * @property {Number}   insetBottom     - The bottom inset of the 9-slice sprite
  */
-
-//todo checking here. Maybe need synchronous.
-
 ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
     _spriteRect: null,
     _capInsetsInternal: null,
@@ -89,6 +86,7 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
     _spritesGenerated: false,
     _spriteFrameRotated: false,
     _textureLoaded:false,
+    _loadedEventListeners: null,
     _className:"Scale9Sprite",
 
     /**
@@ -103,10 +101,19 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
      * add texture loaded event listener
      * @param {Function} callback
      * @param {Object} target
-     * @deprecated since 3.1, please use addEventListener instead
      */
     addLoadedEventListener:function(callback, target){
-        this.addEventListener("load", callback, target);
+        this._loadedEventListeners.push({eventCallback:callback, eventTarget:target});
+    },
+
+    _callLoadedEventCallbacks:function(){
+        this._textureLoaded = true;
+        var locListeners = this._loadedEventListeners;
+        for(var i = 0, len = locListeners.length;  i < len; i++){
+            var selCallback = locListeners[i];
+            selCallback.eventCallback.call(selCallback.eventTarget, this);
+        }
+        locListeners.length = 0;
     },
 
     _updateCapInset: function () {
@@ -212,13 +219,11 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
             contentSizeChanged = true;
         }
 
-        //begin cache
-        cc.renderer._turnToCacheMode(this.__instanceId);
-        this._scale9Image.visit();
-
-        //draw to cache canvas
-        this._cacheContext.clearRect(0, 0, size.width, -size.height);
-        cc.renderer._renderingToCacheCanvas(this._cacheContext, this.__instanceId);
+        //cc._renderContext = this._cacheContext;
+        cc.view._setScaleXYForRenderTexture();
+        this._scale9Image.visit(this._cacheContext);
+        //cc._renderContext = cc._mainRenderContextBackup;
+        cc.view._resetScale();
 
         if(contentSizeChanged)
             this._cacheSprite.setTextureRect(cc.rect(0,0, size.width, size.height));
@@ -243,10 +248,10 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
         this._originalSize = cc.size(0, 0);
         this._preferredSize = cc.size(0, 0);
         this._capInsets = cc.rect(0, 0, 0, 0);
+        this._loadedEventListeners = [];
 
         //cache
         if(cc._renderType === cc._RENDER_TYPE_CANVAS){
-
             var locCacheCanvas = this._cacheCanvas = cc.newElement('canvas');
             locCacheCanvas.width = 1;
             locCacheCanvas.height = 1;
@@ -292,12 +297,6 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
     setPreferredSize: function (preferredSize) {
         this.setContentSize(preferredSize);
         this._preferredSize = preferredSize;
-
-        if (this._positionsAreDirty) {
-            this._updatePositions();
-            this._positionsAreDirty = false;
-            this._scale9Dirty = true;
-        }
     },
     _setPreferredWidth: function (value) {
         this._setWidth(value);
@@ -482,31 +481,16 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
     },
 
     visit: function (ctx) {
-        if(!this._visible){
-            return;
-        }
-
         if (this._positionsAreDirty) {
             this._updatePositions();
             this._positionsAreDirty = false;
             this._scale9Dirty = true;
         }
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS){
+        if(this._scale9Dirty && cc._renderType === cc._RENDER_TYPE_CANVAS){
             this._scale9Dirty = false;
             this._cacheScale9Sprite();
-
-            cc.Node.prototype.visit.call(this, ctx);
-        }else{
-            cc.Node.prototype.visit.call(this, ctx);
         }
-    },
-
-    _transformForRenderer: function(){
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS){
-            this._cacheScale9Sprite();
-            this.transform();
-        }
-        cc.Node.prototype._transformForRenderer.call(this);
+        cc.Node.prototype.visit.call(this, ctx);
     },
 
     /**
@@ -573,7 +557,7 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
         var locLoaded = texture.isLoaded();
         this._textureLoaded = locLoaded;
         if(!locLoaded){
-            texture.addEventListener("load", function(sender){
+            texture.addLoadedEventListener(function(sender){
                 // the texture is rotated on Canvas render mode, so isRotated always is false.
                 var preferredSize = this._preferredSize;
                 preferredSize = cc.size(preferredSize.width, preferredSize.height);
@@ -581,11 +565,11 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
                 this.updateWithBatchNode(this._scale9Image, cc.rect(0,0,size.width,size.height), false, this._capInsets);
                 this.setPreferredSize(preferredSize);
                 this._positionsAreDirty = true;
-                this.dispatchEvent("load");
+                this._callLoadedEventCallbacks();
             }, this);
         }
 
-        return this.initWithBatchNode(new cc.SpriteBatchNode(file, 9), rect, false, capInsets);
+        return this.initWithBatchNode(cc.SpriteBatchNode.create(file, 9), rect, false, capInsets);
     },
 
     /**
@@ -606,17 +590,17 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
         var locLoaded = spriteFrame.textureLoaded();
         this._textureLoaded = locLoaded;
         if(!locLoaded){
-            spriteFrame.addEventListener("load", function(sender){
+            spriteFrame.addLoadedEventListener(function(sender){
                 // the texture is rotated on Canvas render mode, so isRotated always is false.
                 var preferredSize = this._preferredSize;
                 preferredSize = cc.size(preferredSize.width, preferredSize.height);
                 this.updateWithBatchNode(this._scale9Image, sender.getRect(), cc._renderType == cc._RENDER_TYPE_WEBGL && sender.isRotated(), this._capInsets);
                 this.setPreferredSize(preferredSize);
                 this._positionsAreDirty = true;
-                this.dispatchEvent("load");
+                this._callLoadedEventCallbacks();
             },this);
         }
-        var batchNode = new cc.SpriteBatchNode(spriteFrame.getTexture(), 9);
+        var batchNode = cc.SpriteBatchNode.create(spriteFrame.getTexture(), 9);
         // the texture is rotated on Canvas render mode, so isRotated always is false.
         return this.initWithBatchNode(batchNode, spriteFrame.getRect(), cc._renderType == cc._RENDER_TYPE_WEBGL && spriteFrame.isRotated(), capInsets);
     },
@@ -710,9 +694,9 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
         var locLoaded = tmpTexture.isLoaded();
         this._textureLoaded = locLoaded;
         if(!locLoaded){
-            tmpTexture.addEventListener("load", function(sender){
+            tmpTexture.addLoadedEventListener(function(sender){
                 this._positionsAreDirty = true;
-                this.dispatchEvent("load");
+                this._callLoadedEventCallbacks();
             },this);
             return true;
         }
@@ -1001,19 +985,19 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
      * @param {cc.SpriteFrame} spriteFrame
      */
     setSpriteFrame: function (spriteFrame) {
-        var batchNode = new cc.SpriteBatchNode(spriteFrame.getTexture(), 9);
+        var batchNode = cc.SpriteBatchNode.create(spriteFrame.getTexture(), 9);
         // the texture is rotated on Canvas render mode, so isRotated always is false.
         var locLoaded = spriteFrame.textureLoaded();
         this._textureLoaded = locLoaded;
         if(!locLoaded){
-            spriteFrame.addEventListener("load", function(sender){
+            spriteFrame.addLoadedEventListener(function(sender){
                 // the texture is rotated on Canvas render mode, so isRotated always is false.
                 var preferredSize = this._preferredSize;
                 preferredSize = cc.size(preferredSize.width, preferredSize.height);
                 this.updateWithBatchNode(this._scale9Image, sender.getRect(), cc._renderType == cc._RENDER_TYPE_WEBGL && sender.isRotated(), this._capInsets);
                 this.setPreferredSize(preferredSize);
                 this._positionsAreDirty = true;
-                this.dispatchEvent("load");
+                this._callLoadedEventCallbacks();
             },this);
         }
         this.updateWithBatchNode(batchNode, spriteFrame.getRect(), cc._renderType == cc._RENDER_TYPE_WEBGL && spriteFrame.isRotated(), cc.rect(0, 0, 0, 0));
@@ -1027,7 +1011,6 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
 });
 
 var _p = ccui.Scale9Sprite.prototype;
-cc.EventHelper.prototype.apply(_p);
 
 // Extended properties
 /** @expose */

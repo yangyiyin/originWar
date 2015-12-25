@@ -49,16 +49,10 @@ cc._tmp.WebGLCCNode = function () {
         _t._transform4x4 = mat4;
         _t._glServerState = 0;
         _t._stackMatrix = new cc.kmMat4();
-        this._initRendererCmd();
     };
 
     _p.setNodeDirty = function () {
-        var _t = this;
-        if(_t._transformDirty === false){
-            _t._setNodeDirtyForCache();
-            _t._renderCmdDiry = _t._transformDirty = _t._inverseDirty = true;
-            cc.renderer.pushDirtyNode(this);
-        }
+        this._transformDirty === false && (this._transformDirty = this._inverseDirty = true);
     };
 
     _p.visit = function () {
@@ -66,18 +60,18 @@ cc._tmp.WebGLCCNode = function () {
         // quick return if not visible
         if (!_t._visible)
             return;
-
-        if( _t._parent)
-            _t._curLevel = _t._parent._curLevel + 1;
-
         var context = cc._renderContext, i, currentStack = cc.current_stack;
 
+        //cc.kmGLPushMatrixWitMat4(_t._stackMatrix);
         //optimize performance for javascript
         currentStack.stack.push(currentStack.top);
         cc.kmMat4Assign(_t._stackMatrix, currentStack.top);
         currentStack.top = _t._stackMatrix;
 
-        //_t.toRenderer();
+        var locGrid = _t.grid;
+        if (locGrid && locGrid._active)
+            locGrid.beforeDraw();
+
         _t.transform();
 
         var locChildren = _t._children;
@@ -91,75 +85,23 @@ cc._tmp.WebGLCCNode = function () {
                 else
                     break;
             }
-            if(this._rendererCmd)
-                cc.renderer.pushRenderCommand(this._rendererCmd);
+            _t.draw(context);
             // draw children zOrder >= 0
             for (; i < childLen; i++) {
                 if (locChildren[i]) {
                     locChildren[i].visit();
                 }
             }
-        } else{
-            if(this._rendererCmd)
-                cc.renderer.pushRenderCommand(this._rendererCmd);
-        }
+        } else
+            _t.draw(context);
 
+        _t.arrivalOrder = 0;
+        if (locGrid && locGrid._active)
+            locGrid.afterDraw(_t);
+
+        //cc.kmGLPopMatrix();
         //optimize performance for javascript
         currentStack.top = currentStack.stack.pop();
-    };
-
-    _p._transformForRenderer = function (pMatrix) {
-        var t4x4 = this._transform4x4, stackMatrix = this._stackMatrix,
-            parentMatrix = pMatrix || (this._parent ? this._parent._stackMatrix : cc.current_stack.top);
-
-        // Convert 3x3 into 4x4 matrix
-        var trans = this.nodeToParentTransform();
-        var t4x4Mat = t4x4.mat;
-        t4x4Mat[0] = trans.a;
-        t4x4Mat[4] = trans.c;
-        t4x4Mat[12] = trans.tx;
-        t4x4Mat[1] = trans.b;
-        t4x4Mat[5] = trans.d;
-        t4x4Mat[13] = trans.ty;
-
-        // Update Z vertex manually
-        t4x4Mat[14] = this._vertexZ;
-
-        //optimize performance for Javascript
-        cc.kmMat4Multiply(stackMatrix, parentMatrix, t4x4);
-
-        // XXX: Expensive calls. Camera should be integrated into the cached affine matrix
-        if (this._camera != null && !(this.grid != null && this.grid.isActive())) {
-            var apx = this._anchorPointInPoints.x, apy = this._anchorPointInPoints.y;
-            var translate = (apx !== 0.0 || apy !== 0.0);
-            if (translate){
-                if(!cc.SPRITEBATCHNODE_RENDER_SUBPIXEL) {
-                    apx = 0 | apx;
-                    apy = 0 | apy;
-                }
-                //cc.kmGLTranslatef(apx, apy, 0);
-                var translation = new cc.kmMat4();
-                cc.kmMat4Translation(translation, apx, apy, 0);
-                cc.kmMat4Multiply(stackMatrix, stackMatrix, translation);
-
-                this._camera._locateForRenderer(stackMatrix);
-
-                //cc.kmGLTranslatef(-apx, -apy, 0);
-                cc.kmMat4Translation(translation, -apx, -apy, 0);
-                cc.kmMat4Multiply(stackMatrix, stackMatrix, translation);
-            } else {
-                this._camera._locateForRenderer(stackMatrix);
-            }
-        }
-
-        this._renderCmdDiry = false;
-        if(!this._children || this._children.length === 0)
-            return;
-        var i, len, locChildren = this._children;
-        for(i = 0, len = locChildren.length; i< len; i++){
-            locChildren[i]._transformForRenderer(stackMatrix);
-            //locChildren[i]._transformForRenderer();
-        }
     };
 
     _p.transform = function () {
@@ -168,6 +110,7 @@ cc._tmp.WebGLCCNode = function () {
         var t4x4 = _t._transform4x4, topMat4 = cc.current_stack.top;
 
         // Convert 3x3 into 4x4 matrix
+        //cc.CGAffineToGL(_t.nodeToParentTransform(), _t._transform4x4.mat);
         var trans = _t.nodeToParentTransform();
         var t4x4Mat = t4x4.mat;
         t4x4Mat[0] = trans.a;
@@ -178,10 +121,11 @@ cc._tmp.WebGLCCNode = function () {
         t4x4Mat[13] = trans.ty;
 
         // Update Z vertex manually
+        //_t._transform4x4.mat[14] = _t._vertexZ;
         t4x4Mat[14] = _t._vertexZ;
 
         //optimize performance for Javascript
-        cc.kmMat4Multiply(topMat4, topMat4, t4x4);
+        cc.kmMat4Multiply(topMat4, topMat4, t4x4); // = cc.kmGLMultMatrix(_t._transform4x4);
 
         // XXX: Expensive calls. Camera should be integrated into the cached affine matrix
         if (_t._camera != null && !(_t.grid != null && _t.grid.isActive())) {

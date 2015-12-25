@@ -122,9 +122,9 @@ ccs.displayFactory = {
             textureName = textureName.substring(0, startPos);
         //! create display
         if (textureName == "")
-            skin = new ccs.Skin();
+            skin = ccs.Skin.create();
         else
-            skin = new ccs.Skin("#" + textureName + ".png");
+            skin = ccs.Skin.createWithSpriteFrameName(textureName + ".png");
 
         decoDisplay.setDisplay(skin);
 
@@ -160,7 +160,7 @@ ccs.displayFactory = {
         if (ccs.ENABLE_PHYSICS_CHIPMUNK_DETECT || ccs.ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX) {
             if (textureData && textureData.contourDataList.length > 0) {
                 //! create ContourSprite
-                var colliderDetector = new ccs.ColliderDetector(bone);
+                var colliderDetector = ccs.ColliderDetector.create(bone);
                 colliderDetector.addContourDataList(textureData.contourDataList);
                 decoDisplay.setColliderDetector(colliderDetector);
             }
@@ -177,7 +177,7 @@ ccs.displayFactory = {
 
     createArmatureDisplay: function (bone, decoDisplay) {
         var displayData = decoDisplay.getDisplayData();
-        var armature = new ccs.Armature(displayData.displayName, bone);
+        var armature = ccs.Armature.create(displayData.displayName, bone);
         decoDisplay.setDisplay(armature);
     },
 
@@ -197,7 +197,7 @@ ccs.displayFactory = {
 
     createParticleDisplay: function (bone, decoDisplay) {
         var displayData = decoDisplay.getDisplayData();
-        var system = new cc.ParticleSystem(displayData.displayName);
+        var system = cc.ParticleSystem.create(displayData.displayName);
 
         system.removeFromParent();
         system.cleanup();

@@ -138,7 +138,7 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
     },
 
     /**
-     * get whether or not the texture is flipped
+     * get wheter or not the texture is flipped
      * @return {Boolean}
      */
     isTextureFlipped:function () {
@@ -146,7 +146,7 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
     },
 
     /**
-     * set whether or not the texture is flipped
+     * set wheter or not the texture is flipped
      * @param {Boolean} flipped
      */
     setTextureFlipped:function (flipped) {
@@ -210,7 +210,9 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
         // save projection
         this._directorProjection = cc.director.getProjection();
 
-        //this.set2DProjection();    //TODO why?
+        // 2d projection
+        //    [director setProjection:kCCDirectorProjection2D];
+        this.set2DProjection();
         this._grabber.beforeRender(this._texture);
     },
 
@@ -218,9 +220,9 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
         this._grabber.afterRender(this._texture);
 
         // restore projection
-        //cc.director.setProjection(this._directorProjection);
+        cc.director.setProjection(this._directorProjection);
 
-        if (target && target.getCamera().isDirty()) {
+        if (target.getCamera().isDirty()) {
             var offset = target.getAnchorPointInPoints();
 
             //
@@ -232,6 +234,10 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
         }
 
         cc.glBindTexture2D(this._texture);
+
+        // restore projection for default FBO .fixed bug #543 #544
+        //TODO:         CCDirector::sharedDirector().setProjection(CCDirector::sharedDirector().getProjection());
+        //TODO:         CCDirector::sharedDirector().applyOrientation();
         this.blit();
     },
 
@@ -356,12 +362,11 @@ cc.Grid3D = cc.GridBase.extend(/** @lends cc.Grid3D# */{
         this._dirty = true;
     },
 
-    blit:function (target) {
+    blit:function () {
         var n = this._gridSize.width * this._gridSize.height;
         cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POSITION | cc.VERTEX_ATTRIB_FLAG_TEX_COORDS);
         this._shaderProgram.use();
         this._shaderProgram.setUniformsForBuiltins();
-        //this._shaderProgram._setUniformsForBuiltinsForRenderer(target);
 
         var gl = cc._renderContext, locDirty = this._dirty;
         //
@@ -585,12 +590,11 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
         this._dirty = true;
     },
 
-    blit:function (target) {
+    blit:function () {
         var n = this._gridSize.width * this._gridSize.height;
 
         this._shaderProgram.use();
         this._shaderProgram.setUniformsForBuiltins();
-        //this._shaderProgram._setUniformsForBuiltinsForRenderer(target);
 
         //
         // Attributes
@@ -716,7 +720,7 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
 
 /**
  * create one TiledGrid3D object
- * @deprecated since v3.0, please use new cc.TiledGrid3D(gridSize, texture, flipped) instead
+ * @deprecated since v3.0, plese use new cc.TiledGrid3D(gridSize, texture, flipped) instead
  * @param {cc.Size} gridSize
  * @param {cc.Texture2D} [texture=]
  * @param {Boolean} [flipped=]

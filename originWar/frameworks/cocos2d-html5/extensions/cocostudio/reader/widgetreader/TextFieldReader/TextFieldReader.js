@@ -28,7 +28,15 @@
  * @class
  * @name ccs.TextFieldReader
  **/
-ccs.textFieldReader = /** @lends ccs.TextFieldReader# */{
+ccs.TextFieldReader = /** @lends ccs.TextFieldReader# */{
+    /**
+     * Gets the ccs.TextFieldReader.
+     * @deprecated since v3.0, please use ccs.TextFieldReader directly.
+     * @returns {ccs.TextFieldReader}
+     */
+    getInstance: function(){
+        return ccs.TextFieldReader;
+    },
 
     /**
      * Sets ccui.TextField's properties from json dictionary.
@@ -36,13 +44,13 @@ ccs.textFieldReader = /** @lends ccs.TextFieldReader# */{
      * @param {Object} options
      */
     setPropsFromJsonDictionary: function(widget, options){
-        ccs.widgetReader.setPropsFromJsonDictionary.call(this, widget, options);
+        ccs.WidgetReader.setPropsFromJsonDictionary.call(this, widget, options);
 
         var textField = widget;
         var ph = options["placeHolder"];
         if(ph)
             textField.setPlaceHolder(ph);
-        textField.setString(options["text"] || "Text Field");
+        textField.setString(options["text"]);
         var fs = options["fontSize1"];
         if(fs)
             textField.setFontSize(fs);
@@ -51,7 +59,7 @@ ccs.textFieldReader = /** @lends ccs.TextFieldReader# */{
             textField.setFontName(fn);
         var tsw = options["touchSizeWidth"];
         var tsh = options["touchSizeHeight"];
-        if(tsw!=null && tsh!=null)
+        if(tsw && tsh)
             textField.setTouchSize(tsw, tsh);
 
         var dw = options["width"];
@@ -73,7 +81,7 @@ ccs.textFieldReader = /** @lends ccs.TextFieldReader# */{
 
         var aw = options["areaWidth"];
         var ah = options["areaHeight"];
-        if(aw!=null && ah!=null){
+        if(aw && ah){
             var size = cc.size(aw, ah);
             textField.setTextAreaSize(size);
         }
@@ -84,81 +92,6 @@ ccs.textFieldReader = /** @lends ccs.TextFieldReader# */{
         if(va)
             textField.setTextVerticalAlignment(va);
 
-        ccs.widgetReader.setColorPropsFromJsonDictionary.call(this, widget, options);
-    },
-
-    setPropsFromProtocolBuffers: function(widget, nodeTree){
-        var textField = widget;
-        var options = nodeTree["textfieldOptions"];
-
-        var protocolBuffersPath = ccs.uiReader.getFilePath();
-
-		var IsCustomSize = options["isCustomSize"];
-		widget.ignoreContentAdaptWithSize(!IsCustomSize);
-
-        if (IsCustomSize)
-        {
-            var widgetOptions = nodeTree["widgetOptions"];
-            textField.setContentSize(cc.size(widgetOptions["width"], widgetOptions["height"]));
-        }
-
-        ccs.widgetReader.setPropsFromProtocolBuffers.call(this, widget, nodeTree);
-        ccs.widgetReader.setAnchorPointForWidget.call(this, widget, nodeTree);
-
-        textField.setUnifySizeEnabled(false);
-
-        var ph = options["placeholder"];
-        if (ph!==null)
-        {
-            var placeholder = options["placeholder"]!==null ? options["placeholder"] : "inputs words here";
-            textField.setPlaceHolder(placeholder);
-        }
-        var text = options["text"]!==null ? options["text"] : "Text Field";
-        textField.setString(text);
-
-        var fontSize = options["fontSize"] ? options["fontSize"] : 20;
-        textField.setFontSize(fontSize);
-
-
-        var fontName = options["fontName"]!==null ? options["fontName"] : "微软雅黑";
-        textField.setFontName(fontName);
-
-        //        var tsw = options.has_touchsizewidth();
-        //        var tsh = options.has_touchsizeheight();
-        //        if (tsw && tsh)
-        //        {
-        //            textField.setTouchSize(Size(options.touchsizewidth(), options.touchsizeheight()));
-        //        }
-
-        //        var dw = DICTOOL.getFloatValue_json(options, "width");
-        //        var dh = DICTOOL.getFloatValue_json(options, "height");
-        //        if (dw > 0.0f || dh > 0.0f)
-        //        {
-        //            //textField.setSize(Size(dw, dh));
-        //        }
-        var maxLengthEnable = options["maxlengthEnable"];
-        textField.setMaxLengthEnabled(maxLengthEnable);
-
-        if (maxLengthEnable)
-        {
-            var maxLength = options["maxLength"]!==null ? options["maxLength"] : 10;
-            textField.setMaxLength(maxLength);
-        }
-        var passwordEnable = options["passwordEnable"];
-        textField.setPasswordEnabled(passwordEnable);
-        if (passwordEnable)
-        {
-            var passwordStyleText = options["passwordStyleText"]!==null ? options["passwordStyleText"] : "*";
-            textField.setPasswordStyleText(passwordStyleText);
-        }
-
-		if (options["fontResource"]!==null)
-		{
-			var resourceData = options["fontresource"];
-		    textField.setFontName(protocolBuffersPath + resourceData["path"]);
-		}
-
-        // other commonly protperties
-        ccs.widgetReader.setColorPropsFromProtocolBuffers.call(this, widget, nodeTree);
+        ccs.WidgetReader.setColorPropsFromJsonDictionary.call(this, widget, options);
     }
 };

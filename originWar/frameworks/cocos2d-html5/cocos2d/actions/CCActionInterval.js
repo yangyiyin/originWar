@@ -491,7 +491,6 @@ cc.Sequence = cc.ActionInterval.extend(/** @lends cc.Sequence# */{
  *
  * // create sequence with array
  * var seq = cc.sequence(actArray);
- * todo: It should be use new
  */
 cc.sequence = function (/*Multiple Arguments*/tempArray) {
     var paramArray = (tempArray instanceof Array) ? tempArray : arguments;
@@ -976,7 +975,6 @@ cc.Spawn = cc.ActionInterval.extend(/** @lends cc.Spawn# */{
  * @example
  * // example
  * var action = cc.spawn(cc.jumpBy(2, cc.p(300, 0), 50, 4), cc.rotateBy(2, 720));
- * todo:It should be the direct use new
  */
 cc.spawn = function (/*Multiple Arguments*/tempArray) {
     var paramArray = (tempArray instanceof Array) ? tempArray : arguments;

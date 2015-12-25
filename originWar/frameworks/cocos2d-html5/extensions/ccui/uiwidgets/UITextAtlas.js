@@ -54,7 +54,7 @@ ccui.TextAtlas = ccui.Widget.extend(/** @lends ccui.TextAtlas# */{
      */
     ctor: function (stringValue, charMapFile, itemWidth, itemHeight, startCharMap) {
         ccui.Widget.prototype.ctor.call(this);
-        startCharMap !== undefined && this.setProperty(stringValue, charMapFile, itemWidth, itemHeight, startCharMap);
+        startCharMap && this.setProperty(stringValue, charMapFile, itemWidth, itemHeight, startCharMap);
     },
 
     _initRenderer: function () {
@@ -197,7 +197,7 @@ ccui.TextAtlas = ccui.Widget.extend(/** @lends ccui.TextAtlas# */{
     },
 
     _createCloneInstance: function () {
-        return new ccui.TextAtlas();
+        return ccui.TextAtlas.create();
     }
 });
 
@@ -214,6 +214,9 @@ _p = null;
  * allocates and initializes a UILabelAtlas.
  * @deprecated since v3.0, please use new ccui.TextAtlas() instead.
  * @return {ccui.TextAtlas}
+ * @example
+ * // example
+ * var uiLabelAtlas = ccui.TextAtlas.create();
  */
 ccui.TextAtlas.create = function (stringValue, charMapFile, itemWidth, itemHeight, startCharMap) {
     return new ccui.TextAtlas(stringValue, charMapFile, itemWidth, itemHeight, startCharMap);

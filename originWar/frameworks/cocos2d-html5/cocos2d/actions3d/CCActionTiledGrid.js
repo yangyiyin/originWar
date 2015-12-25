@@ -1251,7 +1251,6 @@ cc.SplitCols = cc.TiledGrid3DAction.extend(/** @lends cc.SplitCols# */{
 
             this.setTile(locPos, coords);
         }
-        cc.renderer.childrenOrderDirty = true;
     },
 
     /**

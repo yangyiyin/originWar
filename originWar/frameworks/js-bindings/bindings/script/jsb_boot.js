@@ -472,26 +472,16 @@ cc.loader = {
         var l = arguments.length;
         if(l == 2) cb = option;
 
-        var cachedTex = cc.textureCache.getTextureForKey(url);
-        if (cachedTex) {
-            cb && cb(null, cachedTex);
-        }
-        else if (url.match(jsb.urlRegExp)) {
-            jsb.loadRemoteImg(url, function(succeed, tex) {
-                if (succeed) {
-                    cb && cb(null, tex);
-                }
-                else {
-                    cb && cb("Load image failed");
-                }
-            });
-        }
-        else {
-            var tex = cc.textureCache._addImage(url);
-            if (tex instanceof cc.Texture2D)
-                cb && cb(null, tex);
-            else cb && cb("Load image failed");
-        }
+        jsb.loadRemoteImg(url, function(succeed, tex) {
+            if (succeed) {
+                if(!cb) return;
+                cb(null, tex);
+            }
+            else {
+                if(!cb) return;
+                cb("Load image failed");
+            }
+        });
     },
     /**
      * Load binary data by url.
@@ -527,10 +517,7 @@ cc.loader = {
         var obj = self.cache[url];
         if (obj)
             return cb(null, obj);
-        var loader = null;
-        if (type) {
-            loader = self._register[type.toLowerCase()];
-        }
+        var loader = self._register[type.toLowerCase()];
         if (!loader) {
             cc.error("loader for [" + type + "] not exists!");
             return cb();
@@ -673,14 +660,12 @@ cc.loader = {
      * @returns {*}
      */
     getRes : function(url){
-        var cached = this.cache[url];
-        if (cached)
-            return cached;
+        var self = this;
         var type = cc.path.extname(url);
-        var loader = this._register[type.toLowerCase()];
+        var loader = self._register[type.toLowerCase()];
         if(!loader) return cc.log("loader for [" + type + "] not exists!");
-        var basePath = loader.getBasePath ? loader.getBasePath() : this.resPath;
-        var realUrl = this.getUrl(basePath, url);
+        var basePath = loader.getBasePath ? loader.getBasePath() : self.resPath;
+        var realUrl = self.getUrl(basePath, url);
         return loader.load(realUrl, url);
     },
     
@@ -846,15 +831,32 @@ cc.configuration = cc.Configuration.getInstance();
 cc.textureCache = cc.director.getTextureCache();
 cc.TextureCache.prototype._addImage = cc.TextureCache.prototype.addImage;
 cc.TextureCache.prototype.addImage = function(url, cb, target) {
-    var localTex = null;
-    cc.loader.loadImg(url, function(err, tex) {
-        if (err) tex = null;
+    var cachedTex = this.getTextureForKey(url);
+    if (cachedTex) {
+        cb && cb.call(target, cachedTex);
+        return cachedTex;
+    }
+    if (url.match(jsb.urlRegExp)) {
+        jsb.loadRemoteImg(url, function(succeed, tex) {
+            if (succeed) {
+                if(!cb) return;
+                cb.call(target, tex);
+            }
+            else {
+                if(!cb) return;
+                cb.call(target, null);
+            }
+        });
+    }
+    else {
         if (cb) {
-            cb.call(target, tex);
+            target && (cb = cb.bind(target));
+            this.addImageAsync(url, cb);
         }
-        localTex = tex;
-    });
-    return localTex;
+        else {
+            return this._addImage(url);
+        }
+    }
 };
 /**
  * @type {Object}
@@ -883,15 +885,6 @@ cc.plistParser = cc.PlistParser.getInstance();
 
 // File utils (Temporary, won't be accessible)
 cc.fileUtils = cc.FileUtils.getInstance();
-cc.fileUtils.setPopupNotify(false);
-
-//ccs.nodeReader = ccs.NodeReader.getInstance();
-ccs.actionTimelineCache = ccs.ActionTimelineCache.getInstance();
-ccs.actionTimelineCache.createAction = ccs.ActionTimelineCache.createAction;
-
-ccs.csLoader = ccs.CSLoader.getInstance();
-ccs.csLoader.createNode = ccs.CSLoader.createNode;
-ccs.csLoader.createTimeLine = ccs.CSLoader.createTimeLine;
 
 /**
  * @type {Object}
@@ -914,9 +907,6 @@ cc.screen = {
         onFullScreenChange.call();
     }
 };
-
-cc.EditBox = ccui.EditBox;
-delete ccui.EditBox;
 
 // GUI
 /**
@@ -1092,12 +1082,6 @@ cc._initSys = function(config, CONFIG_KEY){
      * @type {Number}
      */
     locSys.LANGUAGE_SPANISH = "es";
-    
-    /**
-     * Netherlands language code
-     * @type {string}
-     */
-    locSys.LANGUAGE_DUTCH = "nl";
     /**
      * Dutch language code
      * @constant
@@ -1606,39 +1590,6 @@ else if(window.JavaScriptObjCBridge && (cc.sys.os == cc.sys.OS_IOS || cc.sys.os 
     jsb.reflection = new JavaScriptObjCBridge();
 }
 
-jsb.urlRegExp = new RegExp(
-    "^" +
-        // protocol identifier
-        "(?:(?:https?|ftp)://)" +
-        // user:pass authentication
-        "(?:\\S+(?::\\S*)?@)?" +
-        "(?:" +
-            // IP address exclusion
-            // private & local networks
-            "(?!(?:10|127)(?:\\.\\d{1,3}){3})" +
-            "(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})" +
-            "(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})" +
-            // IP address dotted notation octets
-            // excludes loopback network 0.0.0.0
-            // excludes reserved space >= 224.0.0.0
-            // excludes network & broacast addresses
-            // (first & last IP address of each class)
-            "(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])" +
-            "(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
-            "(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))" +
-        "|" +
-            // host name
-            "(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)" +
-            // domain name
-            "(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*" +
-            // TLD identifier
-            "(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))" +
-        ")" +
-        // port number
-        "(?::\\d{2,5})?" +
-        // resource path
-        "(?:/\\S*)?" +
-    "$", "i"
-);
+jsb.urlRegExp = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
 
 //+++++++++++++++++++++++++other initializations end+++++++++++++++++++++++++++++

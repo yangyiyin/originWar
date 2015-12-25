@@ -116,13 +116,6 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
     _clearColorStr:null,
     _className:"RenderTexture",
 
-     //for WebGL
-    _beginWithClearCommand: null,
-    _clearDepthCommand: null,
-    _clearCommand: null,
-    _beginCommand: null,
-    _endCommand: null,
-
     /**
      * creates a RenderTexture object with width and height in Points and a pixel format, only RGB and RGBA formats are valid
      * Constructor of cc.RenderTexture for Canvas
@@ -154,13 +147,6 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
             depthStencilFormat = depthStencilFormat || 0;
             this.initWithWidthAndHeight(width, height, format, depthStencilFormat);
         }
-    },
-
-    _initRendererCmd: function(){
-        //TODO need merge in some code
-        if(cc._renderType === cc._RENDER_TYPE_WEBGL)
-            this._rendererCmd = new cc.RenderTextureRenderCmdWebGL(this);
-
     },
 
     _ctorForWebGL: function (width, height, format, depthStencilFormat) {
@@ -238,7 +224,7 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
         var texture = new cc.Texture2D();
         texture.initWithElement(locCacheCanvas);
         texture.handleLoadedTexture();
-        var locSprite = this.sprite = new cc.Sprite(texture);
+        var locSprite = this.sprite = cc.Sprite.create(texture);
         locSprite.setBlendFunc(cc.ONE, cc.ONE_MINUS_SRC_ALPHA);
         // Disabled by default.
         this.autoDraw = false;
@@ -290,8 +276,9 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
 
         if (cc.configuration.checkForGLExtension("GL_QCOM")) {
             this._textureCopy = new cc.Texture2D();
-            if (!this._textureCopy)
+            if (!this._textureCopy) {
                 return false;
+            }
             this._textureCopy.initWithData(data, this._pixelFormat, powW, powH, cc.size(width, height));
         }
 
@@ -321,7 +308,7 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
 
         locTexture.setAliasTexParameters();
 
-        this.sprite = new cc.Sprite(locTexture);
+        this.sprite = cc.Sprite.create(locTexture);
         var locSprite = this.sprite;
         locSprite.scaleY = -1;
         locSprite.setBlendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
@@ -344,11 +331,8 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
     begin: null,
 
     _beginForCanvas: function () {
-        //old code
-        //cc._renderContext = this._cacheContext;
-        //cc.view._setScaleXYForRenderTexture();
-
-        cc.renderer._turnToCacheMode(this.__instanceId);
+        cc._renderContext = this._cacheContext;
+        cc.view._setScaleXYForRenderTexture();
 
         /*// Save the current matrix
          cc.kmGLMatrixMode(cc.KM_GL_PROJECTION);
@@ -358,8 +342,6 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
     },
 
     _beginForWebGL: function () {
-        cc.renderer._turnToCacheMode(this.__instanceId);
-
         // Save the current matrix
         cc.kmGLMatrixMode(cc.KM_GL_PROJECTION);
         cc.kmGLPushMatrix();
@@ -491,11 +473,8 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
     end: null,
 
     _endForCanvas: function () {
-        //old code
-        //cc._renderContext = cc._mainRenderContextBackup;
-        //cc.view._resetScale();
-
-        cc.renderer._renderingToCacheCanvas(this._cacheContext, this.__instanceId);
+        cc._renderContext = cc._mainRenderContextBackup;
+        cc.view._resetScale();
 
         //TODO
         /*//restore viewport
@@ -507,8 +486,6 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
     },
 
     _endForWebGL: function () {
-        cc.renderer._renderingToBuffer(this.__instanceId);
-
         var gl = cc._renderContext;
         var director = cc.director;
         gl.bindFramebuffer(gl.FRAMEBUFFER, this._oldFBO);
@@ -626,8 +603,15 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
             return;
 
         ctx = ctx || cc._renderContext;
+        ctx.save();
+
+        this.draw(ctx);                                                   // update children of RenderTexture before
         this.transform(ctx);
-        this.sprite.visit(ctx);                                             // draw the RenderTexture
+        this.sprite.visit();                                             // draw the RenderTexture
+
+        ctx.restore();
+
+        this.arrivalOrder = 0;
     },
 
     _visitForWebGL:function (ctx) {
@@ -638,25 +622,22 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
 
         cc.kmGLPushMatrix();
 
-/*        var locGrid = this.grid;
+        var locGrid = this.grid;
         if (locGrid && locGrid.isActive()) {
             locGrid.beforeDraw();
             this.transformAncestors();
-        }*/
+        }
 
         this.transform(ctx);
-        //this.toRenderer();
-
         this.sprite.visit();
-        //this.draw(ctx);
-        if(this._rendererCmd)
-            cc.renderer.pushRenderCommand(this._rendererCmd);
+        this.draw(ctx);
 
-        //TODO GridNode
-/*        if (locGrid && locGrid.isActive())
-            locGrid.afterDraw(this);*/
+        if (locGrid && locGrid.isActive())
+            locGrid.afterDraw(this);
 
         cc.kmGLPopMatrix();
+
+        this.arrivalOrder = 0;
     },
 
     /**
@@ -690,6 +671,7 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
                 if (getChild != selfSprite)
                     getChild.visit();
             }
+
             this.end();
         }
     },
@@ -935,6 +917,9 @@ cc.defineGetterSetter(_p, "clearColorVal", _p.getClearColor, _p.setClearColor);
  * @param {cc.IMAGE_FORMAT_JPEG|cc.IMAGE_FORMAT_PNG|cc.IMAGE_FORMAT_RAWDATA} format
  * @param {Number} depthStencilFormat
  * @return {cc.RenderTexture}
+ * @example
+ * // Example
+ * var rt = cc.RenderTexture.create()
  */
 cc.RenderTexture.create = function (width, height, format, depthStencilFormat) {
     return new cc.RenderTexture(width, height, format, depthStencilFormat);

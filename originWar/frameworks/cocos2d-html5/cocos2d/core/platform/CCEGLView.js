@@ -205,8 +205,20 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
 
     _initFrameSize: function () {
         var locFrameSize = this._frameSize;
-        locFrameSize.width = this._frame.clientWidth;
-        locFrameSize.height = this._frame.clientHeight;
+        //To get the most likely for the actual display resolution data
+        var sWidth = Math.min(window.screen.availWidth, window.screen.width) * window.devicePixelRatio;
+        var sHeight = Math.min(window.screen.availHeight, window.screen.height) * window.devicePixelRatio;
+        //Calibration of the actual resolution may be smaller
+        if(cc.sys.isMobile && this._frame.clientWidth >= sWidth * 0.8){
+            locFrameSize.width = sWidth / window.devicePixelRatio;
+        }else{
+            locFrameSize.width = this._frame.clientWidth;
+        }
+        if(cc.sys.isMobile && this._frame.clientWidth >= sHeight * 0.8){
+            locFrameSize.height = sHeight / window.devicePixelRatio;
+        }else{
+            locFrameSize.height = this._frame.clientHeight;
+        }
     },
 
     // hack
@@ -217,7 +229,7 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
             this.setDesignResolutionSize(designWidth, designHeight, this._resolutionPolicy);
     },
 
-    _setViewPortMeta: function () {
+    _setViewPortMeta: function (width, height) {
         if (this._isAdjustViewPort) {
             var vp = document.getElementById("cocosMetaElement");
             if(vp){
@@ -226,7 +238,6 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
 
             var viewportMetas,
                 elems = document.getElementsByName("viewport"),
-                currentVP = elems ? elems[0] : null,
                 content;
 
             vp = cc.newElement("meta");
@@ -243,20 +254,28 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
             if(cc.sys.isMobile)
                 viewportMetas["target-densitydpi"] = this._targetDensityDPI;
 
-            content = currentVP ? currentVP.content : "";
+            content = (elems && elems.length > 0) ? elems[0].content : "";
             for (var key in viewportMetas) {
                 var pattern = new RegExp(key);
+
                 if (!pattern.test(content)) {
                     content += "," + key + "=" + viewportMetas[key];
                 }
             }
-            if(content != "")
+            if(!elems && content != ""){
                 content = content.substr(1);
+            }
 
+            /*
+             if(width<=320){
+             width = 321;
+             }
+             if(height)
+             content ="height="+height+","+content;
+             if(width)
+             content ="width="+width+","+content;
+             */
             vp.content = content;
-            // For adopting certain android devices which don't support second viewport
-            if (currentVP)
-                currentVP.content = content;
 
             document.head.appendChild(vp);
         }
@@ -499,6 +518,7 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
             return;
         }
         var _t = this;
+        var previousPolicy = _t._resolutionPolicy;
         _t.setResolutionPolicy(resolutionPolicy);
         var policy = _t._resolutionPolicy;
         if (policy)
@@ -509,9 +529,15 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
         }
 
         // Reinit frame size
+        var frameW = _t._frameSize.width, frameH = _t._frameSize.height;
         if (cc.sys.isMobile)
-            _t._setViewPortMeta();
+            _t._setViewPortMeta(_t._frameSize.width, _t._frameSize.height);
         _t._initFrameSize();
+        // No change
+        if (previousPolicy == _t._resolutionPolicy
+            && width == _t._originalDesignResolutionSize.width && height == _t._originalDesignResolutionSize.height
+            && frameW == _t._frameSize.width && frameH == _t._frameSize.height)
+            return;
         _t._designResolutionSize = cc.size(width, height);
         _t._originalDesignResolutionSize = cc.size(width, height);
 
@@ -532,10 +558,10 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
         var director = cc.director;
         director._winSizeInPoints.width = _t._designResolutionSize.width;
         director._winSizeInPoints.height = _t._designResolutionSize.height;
-
-        policy.postApply(_t);
         cc.winSize.width = director._winSizeInPoints.width;
         cc.winSize.height = director._winSizeInPoints.height;
+
+        policy.postApply(_t);
 
         if (cc._renderType == cc._RENDER_TYPE_WEBGL) {
             // reset director's member variables to fit visible rect
@@ -969,13 +995,11 @@ cc.ContentStrategy = cc.Class.extend(/** @lends cc.ContentStrategy# */{
         apply: function (view, designedResolution) {
             var containerW = cc._canvas.width, containerH = cc._canvas.height,
                 designW = designedResolution.width, designH = designedResolution.height,
-                scaleX = containerW / designW, scaleY = containerH / designH, scale,
-                contentW, contentH;
+                scaleX = containerW / designW, scaleY = containerH / designH, scale;
 
-            scaleX < scaleY ? (scale = scaleY, contentW = designW * scale, contentH = containerH)
-                : (scale = scaleX, contentW = containerW, contentH = designH * scale);
+            scaleX < scaleY ? ( scale = scaleY ): ( scale = scaleX );
 
-            return this._buildResult(containerW, containerH, contentW, contentH, scale, scale);
+            return this._buildResult(containerW, containerH, containerW, containerH, scale, scale);
         }
     });
 

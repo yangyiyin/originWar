@@ -141,13 +141,7 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
 
     _initRenderer: function () {
         ccui.Layout.prototype._initRenderer.call(this);
-
-        this._innerContainer = new ccui.Layout();
-        this._innerContainer.setColor(cc.color(255,255,255));
-        this._innerContainer.setOpacity(255);
-        this._innerContainer.setCascadeColorEnabled(true);
-        this._innerContainer.setCascadeOpacityEnabled(true);
-
+        this._innerContainer = ccui.Layout.create();
         this.addProtectedChild(this._innerContainer, 1, 1);
     },
 
@@ -1381,10 +1375,8 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
      */
     onTouchBegan: function (touch, event) {
         var pass = ccui.Layout.prototype.onTouchBegan.call(this, touch, event);
-        if(!this._isInterceptTouch){
-            if (this._hit)
-                this._handlePressLogic(touch);
-        }
+        if (this._hit)
+            this._handlePressLogic(touch);
         return pass;
     },
 
@@ -1395,8 +1387,7 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
      */
     onTouchMoved: function (touch, event) {
         ccui.Layout.prototype.onTouchMoved.call(this, touch, event);
-        if(!this._isInterceptTouch)
-            this._handleMoveLogic(touch);
+        this._handleMoveLogic(touch);
     },
 
     /**
@@ -1406,9 +1397,7 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
      */
     onTouchEnded: function (touch, event) {
         ccui.Layout.prototype.onTouchEnded.call(this, touch, event);
-        if(!this._isInterceptTouch)
-            this._handleReleaseLogic(touch);
-        this._isInterceptTouch = false;
+        this._handleReleaseLogic(touch);
     },
 
     /**
@@ -1418,9 +1407,6 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
      */
     onTouchCancelled: function (touch, event) {
         ccui.Layout.prototype.onTouchCancelled.call(this, touch, event);
-        if (!this._isInterceptTouch)
-            this.handleReleaseLogic(touch);
-        this._isInterceptTouch = false;
     },
 
     /**
@@ -1451,7 +1437,6 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
         var touchPoint = touch.getLocation();
         switch (event) {
             case ccui.Widget.TOUCH_BEGAN:
-                this._isInterceptTouch = true;
                 this._touchBeganPosition.x = touchPoint.x;
                 this._touchBeganPosition.y = touchPoint.y;
                 this._handlePressLogic(touch);
@@ -1470,9 +1455,6 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
                 this._touchEndPosition.x = touchPoint.x;
                 this._touchEndPosition.y = touchPoint.y;
                 this._handleReleaseLogic(touch);
-                if (sender.isSwallowTouches()){
-                    this._isInterceptTouch = false;
-                }
                 break;
         }
     },
@@ -1666,7 +1648,7 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
     },
 
     _createCloneInstance: function(){
-        return new ccui.ScrollView();
+        return ccui.ScrollView.create();
     },
 
     _copyClonedWidgetChildren: function (model) {
@@ -1739,12 +1721,6 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
      */
     addNode: function (node, zOrder, tag) {
         this._innerContainer.addNode(node, zOrder, tag);
-    },
-
-    _transformForRenderer: function(parentMatrix){
-        ccui.Layout.prototype._transformForRenderer.call(this, parentMatrix);
-        if(this._innerContainer && cc._renderType === cc._RENDER_TYPE_WEBGL)
-            this._innerContainer._transformForRenderer(this._stackMatrix);
     }
 });
 
@@ -1764,6 +1740,9 @@ _p = null;
  * allocates and initializes a UIScrollView.
  * @deprecated since v3.0, please use new ccui.ScrollView() instead.
  * @return {ccui.ScrollView}
+ * @example
+ * // example
+ * var uiScrollView = ccui.ScrollView.create();
  */
 ccui.ScrollView.create = function () {
     return new ccui.ScrollView();

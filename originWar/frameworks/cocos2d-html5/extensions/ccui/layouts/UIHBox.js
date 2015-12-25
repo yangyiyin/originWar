@@ -35,7 +35,7 @@ ccui.HBox = ccui.Layout.extend(/** @lends ccui.HBox# */{
      * @param {cc.Size} [size]
      */
     ctor: function(size){
-        if(size !== undefined)
+        if(size)
             this.initWithSize(size);
         else
            this.init();

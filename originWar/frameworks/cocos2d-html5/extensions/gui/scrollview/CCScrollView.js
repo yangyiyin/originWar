@@ -102,9 +102,6 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
     _touchListener: null,
     _className:"ScrollView",
 
-    _beforeDrawCmd:null,
-    _afterDrawCmd:null,
-
     /**
      * @contructor
      * @param size
@@ -123,35 +120,11 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
         this._parentScissorRect = new cc.Rect(0,0,0,0);
         this._tmpViewRect = new cc.Rect(0,0,0,0);
 
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS){
-            this.startCmd = new cc.CustomRenderCmdCanvas(this, function(ctx, scaleX, scaleY){
-                ctx = ctx || cc.context;
-                ctx.save();
-                ctx.save();
-                this.transform();
-                var t = this._transformWorld;
-                ctx.transform(t.a, t.b, t.c, t.d, t.tx * scaleX, -t.ty * scaleY);
-                cc.ScrollView.prototype._beforeDraw.call(this);
-            });
-            this.endCmd = new cc.CustomRenderCmdCanvas(this, function(ctx){
-                ctx = ctx || cc.context;
-                cc.ScrollView.prototype._afterDraw.call(this);
-                ctx.restore();
-            });
-        }
-
         if(container != undefined)
             this.initWithViewSize(size, container);
         else
             this.initWithViewSize(cc.size(200, 200), null);
 
-    },
-
-    _initRendererCmd:function () {
-        if(cc._renderType === cc._RENDER_TYPE_WEBGL){
-            this._beforeDrawCmd = new cc.CustomRenderCmdWebGL(this, this._onBeforeDraw);
-            this._afterDrawCmd = new cc.CustomRenderCmdWebGL(this, this._onAfterDraw);
-        }
     },
 
     init:function () {
@@ -170,7 +143,7 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
             this._container = container;
 
             if (!this._container) {
-                this._container = new cc.Layer();
+                this._container = cc.Layer.create();
                 this._container.ignoreAnchorPointForPosition(false);
                 this._container.setAnchorPoint(pZero);
             }
@@ -235,9 +208,9 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
      * @param {Number} dt animation duration
      */
     setContentOffsetInDuration:function (offset, dt) {
-        var scroll = cc.moveTo(dt, offset);
-        var expire = cc.callFunc(this._stoppedAnimatedScroll, this);
-        this._container.runAction(cc.sequence(scroll, expire));
+        var scroll = cc.MoveTo.create(dt, offset);
+        var expire = cc.CallFunc.create(this._stoppedAnimatedScroll, this);
+        this._container.runAction(cc.Sequence.create(scroll, expire));
         this.schedule(this._performedAnimatedScroll);
     },
 
@@ -290,7 +263,7 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
         if (dt > 0) {
             var locScale = this._container.getScale();
             if (locScale != s) {
-                var scaleAction = cc.actionTween(dt, "zoomScale", locScale, s);
+                var scaleAction = cc.ActionTween.create(dt, "zoomScale", locScale, s);
                 this.runAction(scaleAction);
             }
         } else {
@@ -462,8 +435,6 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
         if (!this.isVisible())
             return;
 
-        this.setNodeDirty();
-
         if (this._touches.length === 1 && this._dragging) { // scrolling
             this._touchMoved = true;
             //var frameOriginal = this.getParent().convertToWorldSpace(this.getPosition());
@@ -617,11 +588,9 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
         var context = ctx || cc._renderContext;
         var i, locChildren = this._children, selChild, childrenLen;
         if (cc._renderType === cc._RENDER_TYPE_CANVAS) {
-//            context.save();
+            context.save();
             this.transform(context);
-            if(this.startCmd)
-                cc.renderer.pushRenderCommand(this.startCmd);
-//            this._beforeDraw(context);
+            this._beforeDraw(context);
 
             if (locChildren && locChildren.length > 0) {
                 childrenLen = locChildren.length;
@@ -635,31 +604,25 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
                         break;
                 }
 
-//                this.draw(context);             // self draw
-                if(this._rendererCmd)
-                    cc.renderer.pushRenderCommand(this._rendererCmd);
+                this.draw(context);             // self draw
 
                 // draw children zOrder >= 0
                 for (; i < childrenLen; i++)
                     locChildren[i].visit(context);
             } else{
-//                this.draw(context);             // self draw
-                if(this._rendererCmd)
-                    cc.renderer.pushRenderCommand(this._rendererCmd);
+                this.draw(context);             // self draw
             }
 
-//            this._afterDraw();
-            if(this.endCmd)
-                cc.renderer.pushRenderCommand(this.endCmd);
+            this._afterDraw();
 
-//            context.restore();
+            context.restore();
         } else {
             cc.kmGLPushMatrix();
-//            var locGrid = this.grid;
-//            if (locGrid && locGrid.isActive()) {
-//                locGrid.beforeDraw();
-//                this.transformAncestors();
-//            }
+            var locGrid = this.grid;
+            if (locGrid && locGrid.isActive()) {
+                locGrid.beforeDraw();
+                this.transformAncestors();
+            }
 
             this.transform(context);
             this._beforeDraw(context);
@@ -675,22 +638,18 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
                 }
 
                 // this draw
-                //this.draw(context);
-                if(this._rendererCmd)
-                    cc.renderer.pushRenderCommand(this._rendererCmd);
+                this.draw(context);
 
                 // draw children zOrder >= 0
                 for (; i < childrenLen; i++)
                     locChildren[i].visit();
             } else{
-                //this.draw(context);
-                if(this._rendererCmd)
-                    cc.renderer.pushRenderCommand(this._rendererCmd);
+                this.draw(context);
             }
 
             this._afterDraw(context);
-//            if (locGrid && locGrid.isActive())
-//                locGrid.afterDraw(this);
+            if (locGrid && locGrid.isActive())
+                locGrid.afterDraw(this);
 
             cc.kmGLPopMatrix();
         }
@@ -850,7 +809,7 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
     _beforeDraw:function (context) {
         if (this._clippingToBounds) {
             this._scissorRestored = false;
-            var locEGLViewer = cc.view;
+            var frame = this._getViewRect(), locEGLViewer = cc.view;
 
             var scaleX = this.getScaleX();
             var scaleY = this.getScaleY();
@@ -864,35 +823,28 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
 
                 ctx.beginPath();
                 ctx.rect(startX, startY, getWidth, -getHeight);
-                ctx.restore();
                 ctx.clip();
                 ctx.closePath();
             } else {
-                cc.renderer.pushRenderCommand(this._beforeDrawCmd);
+                var EGLViewer = cc.view;
+                if(EGLViewer.isScissorEnabled()){
+                    this._scissorRestored = true;
+                    this._parentScissorRect = EGLViewer.getScissorRect();
+                    //set the intersection of m_tParentScissorRect and frame as the new scissor rect
+                    if (cc.rectIntersection(frame, this._parentScissorRect)) {
+                        var locPSRect = this._parentScissorRect;
+                        var x = Math.max(frame.x, locPSRect.x);
+                        var y = Math.max(frame.y, locPSRect.y);
+                        var xx = Math.min(frame.x + frame.width, locPSRect.x + locPSRect.width);
+                        var yy = Math.min(frame.y + frame.height, locPSRect.y + locPSRect.height);
+                        EGLViewer.setScissorInPoints(x, y, xx - x, yy - y);
+                    }
+                }else{
+                    ctx.enable(ctx.SCISSOR_TEST);
+                    //clip
+                    EGLViewer.setScissorInPoints(frame.x, frame.y, frame.width, frame.height);
+                }
             }
-        }
-    },
-
-    _onBeforeDraw:function(){
-        var EGLViewer = cc.view;
-        var frame = this._getViewRect();
-        if(EGLViewer.isScissorEnabled()){
-            this._scissorRestored = true;
-            this._parentScissorRect = EGLViewer.getScissorRect();
-            //set the intersection of m_tParentScissorRect and frame as the new scissor rect
-            if (cc.rectIntersection(frame, this._parentScissorRect)) {
-                var locPSRect = this._parentScissorRect;
-                var x = Math.max(frame.x, locPSRect.x);
-                var y = Math.max(frame.y, locPSRect.y);
-                var xx = Math.min(frame.x + frame.width, locPSRect.x + locPSRect.width);
-                var yy = Math.min(frame.y + frame.height, locPSRect.y + locPSRect.height);
-                EGLViewer.setScissorInPoints(x, y, xx - x, yy - y);
-            }
-        }else{
-            var ctx = cc._renderContext;
-            ctx.enable(ctx.SCISSOR_TEST);
-            //clip
-            EGLViewer.setScissorInPoints(frame.x, frame.y, frame.width, frame.height);
         }
     },
     /**
@@ -901,16 +853,13 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
      */
     _afterDraw:function (context) {
         if (this._clippingToBounds && cc._renderType === cc._RENDER_TYPE_WEBGL) {
-            cc.renderer.pushRenderCommand(this._afterDrawCmd);
-        }
-    },
-    _onAfterDraw:function(){
-        if (this._scissorRestored) {  //restore the parent's scissor rect
-            var rect = this._parentScissorRect;
-            cc.view.setScissorInPoints(rect.x, rect.y, rect.width, rect.height)
-        }else{
-            var ctx = cc._renderContext;
-            ctx.disable(ctx.SCISSOR_TEST);
+            if (this._scissorRestored) {  //restore the parent's scissor rect
+                var rect = this._parentScissorRect;
+                cc.view.setScissorInPoints(rect.x, rect.y, rect.width, rect.height)
+            }else{
+                var ctx = context || cc._renderContext;
+                ctx.disable(ctx.SCISSOR_TEST);
+            }
         }
     },
     /**

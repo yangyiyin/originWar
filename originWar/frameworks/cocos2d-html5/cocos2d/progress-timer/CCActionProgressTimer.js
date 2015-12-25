@@ -89,6 +89,11 @@ cc.ProgressTo = cc.ActionInterval.extend(/** @lends cc.ProgressTo# */{
     startWithTarget:function (target) {
         cc.ActionInterval.prototype.startWithTarget.call(this, target);
         this._from = target.percentage;
+
+        // XXX: Is this correct ?
+        // Adding it to support CCRepeat
+        if (this._from == 100)
+            this._from = 0;
     },
 
     /**
@@ -122,6 +127,9 @@ cc.progressTo = function (duration, percent) {
  * @param {Number} duration duration in seconds
  * @param {Number} percent
  * @return {cc.ProgressTo}
+ * @example
+ * //example
+ * var progress = cc.ProgressTo.create(duration,percent);
  */
 cc.ProgressTo.create = cc.progressTo;
 
@@ -223,5 +231,8 @@ cc.progressFromTo = function (duration, fromPercentage, toPercentage) {
  * @param {Number} fromPercentage
  * @param {Number} toPercentage
  * @return {cc.ProgressFromTo}
+ * @example
+ * //example
+ * var progress = cc.ProgressFromTo.create(duration, fromPercentage, toPercentage);
  */
 cc.ProgressFromTo.create = cc.progressFromTo;

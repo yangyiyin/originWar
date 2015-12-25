@@ -398,7 +398,7 @@ cc.FlipY3D.create = cc.flipY3D;
  * Upside down. <br />
  * Reference the test cases (Effects Test)
  * @class
- * @extends cc.Grid3DAction
+ * @extends cc.FlipX3D
  * @param {Number} duration
  * @param {cc.Size} gridSize
  * @param {cc.Point} position

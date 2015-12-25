@@ -70,7 +70,7 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
         this._textAreaSize = cc.size(0, 0);
         ccui.Widget.prototype.ctor.call(this);
 
-        fontSize !== undefined && this.init(textContent, fontName, fontSize);
+        fontSize && this.init(textContent, fontName, fontSize);
 
     },
 
@@ -337,7 +337,6 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
     _labelScaleChangedWithSize: function () {
         var locContentSize = this._contentSize;
         if (this._ignoreSize) {
-            this._labelRenderer.setDimensions(0,0);
             this._labelRenderer.setScale(1.0);
             this._normalScaleValueX = this._normalScaleValueY = 1;
         } else {
@@ -381,7 +380,7 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
      * @param {cc.Size} outlineSize
      */
     enableOutline: function(outlineColor, outlineSize){
-        this._labelRenderer.enableStroke(outlineColor, outlineSize);
+        this._labelRenderer.enableOutline(outlineColor, outlineSize);
     },
 
     /**
@@ -402,7 +401,7 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
     },
 
     _createCloneInstance: function () {
-        return new ccui.Text();
+        return ccui.Text.create();
     },
 
     _copySpecialProperties: function (uiLabel) {
@@ -432,16 +431,8 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
     },
     _getBoundingHeight: function () {
         return this._textAreaSize.height;
-    },
-
-    _transformForRenderer: function(){
-        this._adaptRenderers();
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
-            cc.Node.prototype.transform.call(this);
-        else
-            cc.ProtectedNode.prototype._transformForRenderer.call(this);
-        this._labelRenderer._transformForRenderer();
     }
+
 });
 
 var _p = ccui.Text.prototype;
@@ -481,6 +472,9 @@ _p = null;
  * allocates and initializes a UILabel.
  * @deprecated since v3.0, please use new ccui.Text() instead.
  * @return {ccui.Text}
+ * @example
+ * // example
+ * var uiLabel = ccui.Text.create();
  */
 ccui.Label = ccui.Text.create = function (textContent, fontName, fontSize) {
     return new ccui.Text(textContent, fontName, fontSize);

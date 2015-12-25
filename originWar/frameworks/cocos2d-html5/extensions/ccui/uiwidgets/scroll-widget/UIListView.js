@@ -120,7 +120,7 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
             case ccui.ScrollView.DIR_VERTICAL:
                 llp = item.getLayoutParameter();
                 if (!llp) {
-                    var defaultLp = new ccui.LinearLayoutParameter();
+                    var defaultLp = ccui.LinearLayoutParameter.create();
                     switch (this._gravity) {
                         case ccui.ListView.GRAVITY_LEFT:
                             defaultLp.setGravity(ccui.LinearLayoutParameter.LEFT);
@@ -162,7 +162,7 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
             case ccui.ScrollView.DIR_HORIZONTAL:
                 llp = item.getLayoutParameter();
                 if (!llp) {
-                    var defaultLp = new ccui.LinearLayoutParameter();
+                    var defaultLp = ccui.LinearLayoutParameter.create();
                     switch (this._gravity) {
                         case ccui.ListView.GRAVITY_TOP:
                             defaultLp.setGravity(ccui.LinearLayoutParameter.TOP);
@@ -517,7 +517,7 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
     },
 
     _createCloneInstance: function () {
-        return new ccui.ListView();
+        return ccui.ListView.create();
     },
 
     _copyClonedWidgetChildren: function (model) {
@@ -544,6 +544,9 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
 /**
  * allocates and initializes a UIListView.
  * @deprecated since v3.0, please use new ccui.ListView() instead.
+ * @example
+ * // example
+ * var uiPageView = ccui.ListView.create();
  */
 ccui.ListView.create = function () {
     return new ccui.ListView();

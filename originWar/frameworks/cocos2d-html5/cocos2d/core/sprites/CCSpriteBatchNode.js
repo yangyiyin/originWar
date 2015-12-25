@@ -219,8 +219,9 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
         if (children && children.length > 0) {
             for (var i = 0; i < children.length; i++) {
                 var obj = children[i];
-                if (obj && (obj.zIndex < 0))
+                if (obj && (obj.zIndex < 0)) {
                     index = this.rebuildIndexInOrder(obj, index);
+                }
             }
         }
         // ignore self (batch node)
@@ -231,8 +232,9 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
         if (children && children.length > 0) {
             for (i = 0; i < children.length; i++) {
                 obj = children[i];
-                if (obj && (obj.zIndex >= 0))
+                if (obj && (obj.zIndex >= 0)) {
                     index = this.rebuildIndexInOrder(obj, index);
+                }
             }
         }
         return index;
@@ -378,6 +380,7 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
         cc.Node.prototype.removeChild.call(this, child, cleanup);
     },
 
+    _mvpMatrix: null,
     _textureForCanvas: null,
     _useCache: false,
     _originalTexture: null,
@@ -402,6 +405,7 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
 
     _ctorForWebGL: function (fileImage, capacity) {
         cc.Node.prototype.ctor.call(this);
+        this._mvpMatrix = new cc.kmMat4();
 
         var texture2D;
         capacity = capacity || cc.DEFAULT_SPRITE_BATCH_CAPACITY;
@@ -409,14 +413,11 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
             texture2D = cc.textureCache.getTextureForKey(fileImage);
             if (!texture2D)
                 texture2D = cc.textureCache.addImage(fileImage);
-        } else if (fileImage instanceof cc.Texture2D)
+        }
+        else if (fileImage instanceof cc.Texture2D)
             texture2D = fileImage;
-        texture2D && this.initWithTexture(texture2D, capacity);
-    },
 
-    _initRendererCmd: function(){
-         if(cc._renderType === cc._RENDER_TYPE_WEBGL)
-            this._rendererCmd = new cc.SpriteBatchNodeRenderCmdWebGL(this);
+        texture2D && this.initWithTexture(texture2D, capacity);
     },
 
     /**
@@ -705,7 +706,8 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
         sprite.dirty = true;
 
         this._descendants.push(sprite);
-        sprite.atlasIndex = this._descendants.length - 1;
+        var index = this._descendants.length - 1;
+        sprite.atlasIndex = index;
 
         // add children recursively
         var children = sprite.children;
@@ -843,6 +845,7 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
         context.save();
         this.transform(ctx);
         var i, locChildren = this._children;
+
         if (locChildren) {
             this.sortAllChildren();
             for (i = 0; i < locChildren.length; i++) {
@@ -850,6 +853,7 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
                     locChildren[i].visit(context);
             }
         }
+
         context.restore();
     },
 
@@ -865,29 +869,19 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
         //
         if (!this._visible)
             return;
-
-        var currentStack = cc.current_stack;
-        currentStack.stack.push(currentStack.top);
-        cc.kmMat4Assign(this._stackMatrix, currentStack.top);
-        currentStack.top = this._stackMatrix;
-
-/*        var locGrid = this.grid;
+        cc.kmGLPushMatrix();
+        var locGrid = this.grid;
         if (locGrid && locGrid.isActive()) {
             locGrid.beforeDraw();
             this.transformAncestors();
-        }*/
-
+        }
         this.sortAllChildren();
         this.transform(gl);
-        //this.draw(gl);
-        if(this._rendererCmd)
-            cc.renderer.pushRenderCommand(this._rendererCmd);
-
-/*        if (locGrid && locGrid.isActive())
-            locGrid.afterDraw(this);*/
-
-        //optimize performance for javascript
-        currentStack.top = currentStack.stack.pop();
+        this.draw(gl);
+        if (locGrid && locGrid.isActive())
+            locGrid.afterDraw(this);
+        cc.kmGLPopMatrix();
+        this.arrivalOrder = 0;
     },
 
     /**

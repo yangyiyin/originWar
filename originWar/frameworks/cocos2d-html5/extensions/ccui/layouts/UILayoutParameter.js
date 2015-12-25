@@ -46,7 +46,7 @@ ccui.Margin = ccui.Class.extend(/** @lends ccui.Margin# */{
      * @param {Number} [bottom]
      */
     ctor: function (margin, top, right, bottom) {
-        if (margin !== undefined && top === undefined) {
+        if (margin && top === undefined) {
             this.left = margin.left;
             this.top = margin.top;
             this.right = margin.right;
@@ -177,6 +177,9 @@ ccui.LayoutParameter = ccui.Class.extend(/** @lends ccui.LayoutParameter# */{
  * allocates and initializes a LayoutParameter.
  * @constructs
  * @return {ccui.LayoutParameter}
+ * @example
+ * // example
+ * var uiLayoutParameter = ccui.LayoutParameter.create();
  */
 ccui.LayoutParameter.create = function () {
     return new ccui.LayoutParameter();
@@ -237,7 +240,7 @@ ccui.LinearLayoutParameter = ccui.LayoutParameter.extend(/** @lends ccui.LinearL
     },
 
     _createCloneInstance: function () {
-        return new ccui.LinearLayoutParameter();
+        return ccui.LinearLayoutParameter.create();
     },
 
     _copyProperties: function (model) {
@@ -251,7 +254,9 @@ ccui.LinearLayoutParameter = ccui.LayoutParameter.extend(/** @lends ccui.LinearL
  * allocates and initializes a LinearLayoutParameter.
  * @constructs
  * @return {ccui.LinearLayoutParameter}
- * @deprecated since v3.0, please use new construction instead
+ * @example
+ * // example
+ * var uiLinearLayoutParameter = ccui.LinearLayoutParameter.create();
  */
 ccui.LinearLayoutParameter.create = function () {
     return new ccui.LinearLayoutParameter();
@@ -375,7 +380,7 @@ ccui.RelativeLayoutParameter = ccui.LayoutParameter.extend(/** @lends ccui.Relat
     },
 
     _createCloneInstance:function(){
-        return new ccui.RelativeLayoutParameter();
+        return ccui.RelativeLayoutParameter.create();
     },
 
     _copyProperties:function(model){
@@ -393,6 +398,9 @@ ccui.RelativeLayoutParameter = ccui.LayoutParameter.extend(/** @lends ccui.Relat
  * @function
  * @deprecated since v3.0, please use new ccui.RelativeLayoutParameter() instead.
  * @return {ccui.RelativeLayoutParameter}
+ * @example
+ * // example
+ * var uiRelativeLayoutParameter = ccui.RelativeLayoutParameter.create();
  */
 ccui.RelativeLayoutParameter.create = function () {
     return new ccui.RelativeLayoutParameter();

@@ -67,7 +67,6 @@ cc.GridAction = cc.ActionInterval.extend(/** @lends cc.GridAction# */{
      */
     startWithTarget:function (target) {
         cc.ActionInterval.prototype.startWithTarget.call(this, target);
-        cc.renderer.childrenOrderDirty = true;
         var newGrid = this.getGrid();
         var t = this.target;
         var targetGrid = t.grid;
@@ -287,7 +286,6 @@ cc.StopGrid = cc.ActionInstant.extend(/** @lends cc.StopGrid# */{
      */
     startWithTarget:function (target) {
         cc.ActionInstant.prototype.startWithTarget.call(this, target);
-        cc.renderer.childrenOrderDirty = true;
         var grid = this.target.grid;
         if (grid && grid.isActive())
             grid.setActive(false);
@@ -346,7 +344,6 @@ cc.ReuseGrid = cc.ActionInstant.extend(/** @lends cc.ReuseGrid# */{
      */
     startWithTarget:function (target) {
         cc.ActionInstant.prototype.startWithTarget.call(this, target);
-        cc.renderer.childrenOrderDirty = true;
         if (this.target.grid && this.target.grid.isActive())
             this.target.grid.setReuseGrid(this.target.grid.getReuseGrid() + this._times);
     }

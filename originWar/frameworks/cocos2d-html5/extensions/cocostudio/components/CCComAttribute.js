@@ -40,7 +40,6 @@ ccs.ComAttribute = ccs.Component.extend(/** @lends ccs.ComAttribute# */{
         this._jsonDict = {};
         this._filePath = "";
         this._name = "CCComAttribute";
-        ccs.ComAttribute.prototype.init.call(this);
     },
 
     /**
@@ -206,5 +205,8 @@ ccs.ComAttribute = ccs.Component.extend(/** @lends ccs.ComAttribute# */{
  * var com = ccs.ComAttribute.create();
  */
 ccs.ComAttribute.create = function () {
-    return new ccs.ComAttribute();
+    var com = new ccs.ComAttribute();
+    if (com && com.init())
+        return com;
+    return null;
 };

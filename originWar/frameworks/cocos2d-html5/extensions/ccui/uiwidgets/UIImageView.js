@@ -53,7 +53,7 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
         this._imageTextureSize = cc.size(this._capInsets.width, this._capInsets.height);
         ccui.Widget.prototype.ctor.call(this);
 
-        texType !== undefined && this.init(imageFileName, texType);
+        texType && this.init(imageFileName, texType);
     },
 
     /**
@@ -74,7 +74,7 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
     },
 
     _initRenderer: function () {
-        this._imageRenderer = new cc.Sprite();
+        this._imageRenderer = cc.Sprite.create();
         this.addProtectedChild(this._imageRenderer, ccui.ImageView.RENDERER_ZORDER, -1);
     },
 
@@ -117,7 +117,7 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
         }
 
         if(!imageRenderer.texture || !imageRenderer.texture.isLoaded()){
-            imageRenderer.addEventListener("load", function(){
+            imageRenderer.addLoadedEventListener(function(){
                 self._findLayout();
 
                 self._imageTextureSize = imageRenderer.getContentSize();
@@ -178,7 +178,7 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
         if (this._scale9Enabled) {
             this._imageRenderer = new ccui.Scale9Sprite();
         } else {
-            this._imageRenderer = new cc.Sprite();
+            this._imageRenderer = cc.Sprite.create();
         }
         this.loadTexture(this._textureFile, this._imageTexType);
         this.addProtectedChild(this._imageRenderer, ccui.ImageView.RENDERER_ZORDER, -1);
@@ -296,7 +296,7 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
     },
 
     _createCloneInstance:function(){
-        return new ccui.ImageView();
+        return ccui.ImageView.create();
     },
 
     _copySpecialProperties: function (imageView) {
@@ -316,6 +316,9 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
  * @param {string} imageFileName
  * @param {Number} texType
  * @return {ccui.ImageView}
+ * @example
+ * // example
+ * var uiImageView = ccui.ImageView.create();
  */
 ccui.ImageView.create = function (imageFileName, texType) {
     return new ccui.ImageView(imageFileName, texType);

@@ -48,14 +48,18 @@ cc.loader.register(["json", "ExportJson"], cc._jsonLoader);
 
 cc._imgLoader = {
     load : function(realUrl, url, res, cb){
-        cc.loader.loadImg(realUrl, function(err, img){
-            if(err) {
-                cb && cb(err);
-                return;
-            }
-            cc.loader.cache[url] = img;
-            cb && cb(null, img);
-        });
+        if (realUrl.match(jsb.urlRegExp)) {
+            cc.loader.loadImg(realUrl, function(err, img){
+                if(err)
+                    return cb(err);
+                cc.textureCache.handleLoadedTexture(realUrl);
+                cc.loader.cache[url] = img;
+                cb(null, img);
+            });
+        }
+        else{
+            return null;
+        }
     }
 };
 cc.loader.register(["png", "jpg", "bmp","jpeg","gif"], cc._imgLoader);

@@ -117,11 +117,12 @@ ccs.TriggerObj = ccs.Class.extend(/** @lends ccs.TriggerObj# */{
     _enable: true,
     _vInt: null,
 
+    /**
+     * Construction of trigger object.
+     */
     ctor: function () {
         this._id = 0;
         this._enable = true;
-
-        ccs.TriggerObj.prototype.init.call(this);
     },
 
     /**
@@ -259,5 +260,8 @@ ccs.TriggerObj = ccs.Class.extend(/** @lends ccs.TriggerObj# */{
 });
 
 ccs.TriggerObj.create = function () {
-    return new ccs.TriggerObj();
+    var ret = new ccs.TriggerObj();
+    if (ret.init())
+        return ret;
+    return null;
 };

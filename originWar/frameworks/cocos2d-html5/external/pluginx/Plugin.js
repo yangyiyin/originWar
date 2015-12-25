@@ -43,7 +43,6 @@
 
         /**
          * @returns {PluginManager}
-         * @expose
          */
         getInstance: function(){
             return this;
@@ -51,7 +50,6 @@
 
         /**
          * @param {String} pluginName
-         * @expose
          */
         loadPlugin: function(pluginName){
 
@@ -60,7 +58,6 @@
         /**
          *
          * @param pluginName
-         * @expose
          */
         unloadPlugin: function(pluginName){
 
@@ -74,26 +71,22 @@
 
         /**
          * @param {Boolean} debug
-         * @expose
          */
         setDebugMode: function(debug){},
 
         /**
          * @param {String} appKey
-         * @expose
          */
         startSession: function(appKey){},
 
         /**
          * @param {Boolean} Capture
-         * @expose
          */
         setCaptureUncaughtException: function(Capture){},
 
         /**
          * @param {String} funName
          * @param {All} Params
-         * @expose
          */
         callFuncWithParam: function(funName){
             if(typeof this[funName] === 'function'){
@@ -106,7 +99,6 @@
         /**
          * @param {String} funName
          * @param {All} Params
-         * @expose
          */
         callStringFuncWithParam: function(funName){
             this.callFuncWithParam.apply(arguments);
@@ -114,7 +106,6 @@
 
         /**
          * @returns {String}
-         * @expose
          */
         getPluginName: function(){
             return this._name;
@@ -122,14 +113,12 @@
 
         /**
          * @returns {String}
-         * @expose
          */
         getPluginVersion: function(){
             return this._version;
         }
     };
 
-    /** @expose */
     PluginAssembly.extend = function(name, porp){
         var p, prototype = {};
         for(p in PluginAssembly.prototype){
@@ -169,86 +158,55 @@
         return tmpValue
     };
 
-    /** @expose */
     Param.ParamType = {
-        /** @expose */
         TypeInt:1,
-        /** @expose */
         TypeFloat:2,
-        /** @expose */
         TypeBool:3,
-        /** @expose */
         TypeString:4,
-        /** @expose */
         TypeStringMap:5
     };
 
-    /** @expose */
     Param.AdsResultCode = {
-        /** @expose */
         AdsReceived:0,
-        /** @expose */
         FullScreenViewShown:1,
-        /** @expose */
         FullScreenViewDismissed:2,
-        /** @expose */
         PointsSpendSucceed:3,
-        /** @expose */
         PointsSpendFailed:4,
-        /** @expose */
         NetworkError:5,
-        /** @expose */
         UnknownError:6
     };
 
-    /** @expose */
     Param.PayResultCode = {
-        /** @expose */
         PaySuccess:0,
-        /** @expose */
         PayFail:1,
-        /** @expose */
         PayCancel:2,
-        /** @expose */
         PayTimeOut:3
     };
 
-    /** @expose */
     Param.ShareResultCode = {
-        /** @expose */
         ShareSuccess:0,
-        /** @expose */
         ShareFail:1,
-        /** @expose */
         ShareCancel:2,
-        /** @expose */
         ShareTimeOut:3
     };
 
-    /** @expose */
     var PluginList = {};
 
-    /** @expose */
     var Plugin = {
 
-        /** @expose */
         extend: function(name, extend){
             PluginList[name] = new (PluginAssembly.extend(name, extend));
             typeof PluginList[name].ctor === "function" && PluginList[name].ctor(config[name]);
         },
 
-        /** @expose */
         PluginList: PluginList,
 
-        /** @expose */
         PluginParam: Param,
 
-        /** @expose */
         PluginManager: new PluginManager()
 
     };
 
-    /** @expose */
     window.plugin = Plugin;
 
 })();

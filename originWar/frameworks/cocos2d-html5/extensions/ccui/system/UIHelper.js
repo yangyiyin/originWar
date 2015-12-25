@@ -23,9 +23,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-//todo maybe need change here
-
-
 /**
  * ccui.helper is the singleton object which is the Helper object contains some functions for seek widget
  * @class

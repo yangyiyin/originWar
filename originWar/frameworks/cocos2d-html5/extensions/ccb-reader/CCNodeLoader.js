@@ -332,7 +332,7 @@ cc.NodeLoader = cc.Class.extend({
     },
 
     _createCCNode:function (parent, ccbReader) {
-        return new cc.Node();
+        return cc.Node.create();
     },
 
     parsePropTypePosition:function (node, parent, ccbReader, propertyName) {
@@ -484,7 +484,7 @@ cc.NodeLoader = cc.Class.extend({
 
                 var locContentSize = texture.getContentSize();
                 var bounds = cc.rect(0, 0, locContentSize.width, locContentSize.height);
-                spriteFrame = new cc.SpriteFrame(texture, bounds);
+                spriteFrame = cc.SpriteFrame.create(texture, bounds);
             } else {
                 var frameCache = cc.spriteFrameCache;
                 spriteSheet = ccbReader.getCCBRootPath() + spriteSheet;

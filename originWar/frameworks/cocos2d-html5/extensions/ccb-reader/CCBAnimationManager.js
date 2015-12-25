@@ -231,7 +231,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
             var timeSinceLastKeyframe = keyframe.getTime() - lastKeyframeTime;
             lastKeyframeTime = keyframe.getTime();
             if(timeSinceLastKeyframe > 0) {
-                actions.push(cc.delayTime(timeSinceLastKeyframe));
+                actions.push(cc.DelayTime.create(timeSinceLastKeyframe));
             }
 
             var keyVal = keyframe.getValue();
@@ -262,7 +262,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
                         if(selCallFunc == 0)
                             cc.log("Skipping selector '" + selectorName + "' since no CCBSelectorResolver is present.");
                         else
-                            actions.push(cc.callFunc(selCallFunc,target));
+                            actions.push(cc.CallFunc.create(selCallFunc,target));
                     } else {
                         cc.log("Unexpected empty selector.");
                     }
@@ -272,7 +272,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
         if(actions.length < 1)
             return null;
 
-        return cc.sequence(actions);
+        return cc.Sequence.create(actions);
     },
     getActionForSoundChannel:function(channel) {
         var lastKeyframeTime = 0;
@@ -286,7 +286,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
             var timeSinceLastKeyframe = keyframe.getTime() - lastKeyframeTime;
             lastKeyframeTime = keyframe.getTime();
             if(timeSinceLastKeyframe > 0) {
-                actions.push(cc.delayTime(timeSinceLastKeyframe));
+                actions.push(cc.DelayTime.create(timeSinceLastKeyframe));
             }
 
             var keyVal = keyframe.getValue();
@@ -298,7 +298,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
         if(actions.length < 1)
             return null;
 
-        return cc.sequence(actions);
+        return cc.Sequence.create(actions);
     },
 
     runAnimationsForSequenceNamed:function(name){
@@ -444,19 +444,19 @@ cc.BuilderAnimationManager = cc.Class.extend({
         } else if (propName === "rotationY") {
             return cc.BuilderRotateYTo.create(duration, keyframe1.getValue());
         } else if (propName === "opacity") {
-            return cc.fadeTo(duration, keyframe1.getValue());
+            return cc.FadeTo.create(duration, keyframe1.getValue());
         } else if (propName === "color") {
             var selColor = keyframe1.getValue().getColor();
-            return cc.tintTo(duration, selColor.r, selColor.g, selColor.b);
+            return cc.TintTo.create(duration, selColor.r, selColor.g, selColor.b);
         } else if (propName === "visible") {
             var isVisible = keyframe1.getValue();
             if (isVisible) {
-                return cc.sequence(cc.delayTime(duration), cc.show());
+                return cc.Sequence.create(cc.DelayTime.create(duration), cc.Show.create());
             } else {
-                return cc.sequence(cc.delayTime(duration), cc.hide());
+                return cc.Sequence.create(cc.DelayTime.create(duration), cc.Hide.create());
             }
         } else if (propName === "displayFrame") {
-            return cc.sequence(cc.delayTime(duration), cc.BuilderSetSpriteFrame.create(keyframe1.getValue()));
+            return cc.Sequence.create(cc.DelayTime.create(duration), cc.BuilderSetSpriteFrame.create(keyframe1.getValue()));
         } else if(propName === "position"){
             getArr = this._getBaseValue(node,propName);
             type = getArr[2];
@@ -470,7 +470,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
 
             var absPos = cc._getAbsolutePosition(x,y, type,containerSize,propName);
 
-            return cc.moveTo(duration,absPos);
+            return cc.MoveTo.create(duration,absPos);
         } else if( propName === "scale"){
             getArr = this._getBaseValue(node,propName);
             type = getArr[2];
@@ -487,13 +487,13 @@ cc.BuilderAnimationManager = cc.Class.extend({
                 y *= resolutionScale;
             }
 
-            return cc.scaleTo(duration,x,y);
+            return cc.ScaleTo.create(duration,x,y);
         } else if( propName === "skew") {
             //get relative position
             getValueArr = keyframe1.getValue();
             x = getValueArr[0];
             y = getValueArr[1];
-            return cc.skewTo(duration,x,y);
+            return cc.SkewTo.create(duration,x,y);
         } else {
             cc.log("BuilderReader: Failed to create animation for property: " + propName);
         }
@@ -584,29 +584,29 @@ cc.BuilderAnimationManager = cc.Class.extend({
         if (easingType === CCB_KEYFRAME_EASING_LINEAR || easingType === CCB_KEYFRAME_EASING_INSTANT ) {
             return action;
         } else if (easingType === CCB_KEYFRAME_EASING_CUBIC_IN) {
-            return action.easing(cc.easeIn(easingOpt));
+            return cc.EaseIn.create(action, easingOpt);
         } else if (easingType === CCB_KEYFRAME_EASING_CUBIC_OUT) {
-            return action.easing(cc.easeOut(easingOpt));
+            return cc.EaseOut.create(action, easingOpt);
         } else if (easingType === CCB_KEYFRAME_EASING_CUBIC_INOUT) {
-            return action.easing(cc.easeInOut(easingOpt));
+            return cc.EaseInOut.create(action, easingOpt);
         } else if (easingType === CCB_KEYFRAME_EASING_BACK_IN) {
-            return action.easing(cc.easeBackIn());
+            return cc.EaseBackIn.create(action);
         } else if (easingType === CCB_KEYFRAME_EASING_BACK_OUT) {
-            return action.easing(cc.easeBackOut());
+            return cc.EaseBackOut.create(action);
         } else if (easingType === CCB_KEYFRAME_EASING_BACK_INOUT) {
-            return action.easing(cc.easeBackInOut());
+            return cc.EaseBackInOut.create(action);
         } else if (easingType === CCB_KEYFRAME_EASING_BOUNCE_IN) {
-            return action.easing(cc.easeBounceIn());
+            return cc.EaseBounceIn.create(action);
         } else if (easingType === CCB_KEYFRAME_EASING_BOUNCE_OUT) {
-            return action.easing(cc.easeBounceOut());
+            return cc.EaseBounceOut.create(action);
         } else if (easingType === CCB_KEYFRAME_EASING_BOUNCE_INOUT) {
-            return action.easing(cc.easeBounceInOut());
+            return cc.EaseBounceInOut.create(action);
         } else if (easingType === CCB_KEYFRAME_EASING_ELASTIC_IN) {
-            return action.easing(cc.easeElasticIn(easingOpt));
+            return cc.EaseElasticIn.create(action, easingOpt);
         } else if (easingType === CCB_KEYFRAME_EASING_ELASTIC_OUT) {
-            return action.easing(cc.easeElasticOut(easingOpt));
+            return cc.EaseElasticOut.create(action, easingOpt);
         } else if (easingType === CCB_KEYFRAME_EASING_ELASTIC_INOUT) {
-            return action.easing(cc.easeElasticInOut(easingOpt));
+            return cc.EaseElasticInOut.create(action, easingOpt);
         } else {
             cc.log("BuilderReader: Unkown easing type " + easingType);
             return action;
@@ -625,7 +625,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
             var timeFirst = keyframeFirst.getTime() + tweenDuration;
 
             if (timeFirst > 0) {
-                actions.push(cc.delayTime(timeFirst));
+                actions.push(cc.DelayTime.create(timeFirst));
             }
 
             for (var i = 0; i < numKeyframes - 1; ++i) {

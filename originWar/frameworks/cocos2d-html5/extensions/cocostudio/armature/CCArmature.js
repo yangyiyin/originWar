@@ -73,15 +73,6 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
         name && ccs.Armature.prototype.init.call(this, name, parentBone);
     },
 
-    _initRendererCmd:function () {
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS){
-            this._rendererStartCmd = new cc.CustomRenderCmdCanvas(this, this._startRendererCmdForCanvas);
-            this._rendererEndCmd = new cc.CustomRenderCmdCanvas(this, this._endRendererCmdForCanvas);
-        }else{
-            this._rendererCmd = new cc.ArmatureRenderCmdWebGL(this);
-        }
-    },
-
     /**
      * Initializes a CCArmature with the specified name and CCBone
      * @param {String} [name]
@@ -142,10 +133,10 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
             this.updateOffsetPoint();
         } else {
             this._name = "new_armature";
-            this.armatureData = new ccs.ArmatureData();
+            this.armatureData = ccs.ArmatureData.create();
             this.armatureData.name = this._name;
 
-            animationData = new ccs.AnimationData();
+            animationData = ccs.AnimationData.create();
             animationData.name = this._name;
 
             armatureDataManager.addArmatureData(this._name, this.armatureData);
@@ -177,10 +168,10 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
         var bone = null;
         if (parentName) {
             this.createBone(parentName);
-            bone = new ccs.Bone(boneName);
+            bone = ccs.Bone.create(boneName);
             this.addBone(bone, parentName);
         } else {
-            bone = new ccs.Bone(boneName);
+            bone = ccs.Bone.create(boneName);
             this.addBone(bone, "");
         }
 
@@ -339,10 +330,6 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
         return this._realAnchorPointInPoints;
     },
 
-    getOffsetPoints: function(){
-        return {x: this._offsetPoint.x, y: this._offsetPoint.y};
-    },
-
     /**
      * Sets animation to this Armature
      * @param {ccs.ArmatureAnimation} animation
@@ -386,7 +373,6 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
      * @param  {CanvasRenderingContext2D | WebGLRenderingContext} ctx The render context
      */
     draw: function(ctx){
-        //TODO REMOVE THIS FUNCTION
         if (this._parentBone == null && this._batchNode == null) {
             //        CC_NODE_DRAW_SETUP();
         }
@@ -472,43 +458,11 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
         this.transform(context);
 
         this.sortAllChildren();
-
-        if(this._rendererStartCmd)
-            cc.renderer.pushRenderCommand(this._rendererStartCmd);
         this.draw(ctx);
-        if(this._rendererEndCmd)
-            cc.renderer.pushRenderCommand(this._rendererEndCmd);
 
+        // reset for next frame
         this._cacheDirty = false;
-
-        context.restore();
-    },
-
-    _startRendererCmdForCanvas: function(ctx, scaleX, scaleY){
-        var context = ctx || cc._renderContext;
-        context.save();
-        this.transform(context);
-        var t = this._transformWorld;
-        ctx.transform(t.a, t.b, t.c, t.d, t.tx * scaleX, -t.ty * scaleY);
-
-        var locChildren = this._children;
-        for (var i = 0, len = locChildren.length; i< len; i++) {
-            var selBone = locChildren[i];
-            if (selBone && selBone.getDisplayRenderNode) {
-                var node = selBone.getDisplayRenderNode();
-
-                if (null == node)
-                    continue;
-
-                node._transformForRenderer();
-            }
-        }
-    },
-
-    _endRendererCmdForCanvas: function(ctx){
-        var context = ctx || cc._renderContext;
-
-        this._cacheDirty = false;
+        this.arrivalOrder = 0;
 
         context.restore();
     },
@@ -527,9 +481,10 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
         this.transform();
 
         this.sortAllChildren();
-        //this.draw(context);
-        cc.renderer.pushRenderCommand(this._rendererCmd);
+        this.draw(context);
 
+        // reset for next frame
+        this.arrivalOrder = 0;
         currentStack.top = currentStack.stack.pop();
     },
 
@@ -728,24 +683,6 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
      */
     setVersion: function (version) {
         this.version = version;
-    },
-
-    _transformForRenderer: function(){
-
-        ccs.Node.prototype._transformForRenderer.call(this);
-
-        var locChildren = this._children;
-        for (var i = 0, len = locChildren.length; i< len; i++) {
-            var selBone = locChildren[i];
-            if (selBone && selBone.getDisplayRenderNode) {
-                var node = selBone.getDisplayRenderNode();
-
-                if (null == node)
-                    continue;
-
-                node._transformForRenderer();
-            }
-        }
     }
 });
 
@@ -774,8 +711,13 @@ _p = null;
  * @param {String} [name] Bone name
  * @param {ccs.Bone} [parentBone] the parent bone
  * @return {ccs.Armature}
- * @deprecated since v3.1, please use new construction instead
+ * @example
+ * // example
+ * var armature = ccs.Armature.create();
  */
 ccs.Armature.create = function (name, parentBone) {
-    return new ccs.Armature(name, parentBone);
+    var armature = new ccs.Armature();
+    if (armature.init(name, parentBone))
+        return armature;
+    return null;
 };

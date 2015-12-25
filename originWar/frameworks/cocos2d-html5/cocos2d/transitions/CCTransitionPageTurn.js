@@ -49,7 +49,6 @@ cc.TransitionPageTurn = cc.TransitionScene.extend(/** @lends cc.TransitionPageTu
      */
     ctor:function (t, scene, backwards) {
         cc.TransitionScene.prototype.ctor.call(this);
-        this._gridProxy = new cc.NodeGrid();
         this.initWithDuration(t, scene, backwards);
     },
 
@@ -57,7 +56,6 @@ cc.TransitionPageTurn = cc.TransitionScene.extend(/** @lends cc.TransitionPageTu
      * @type Boolean
      */
     _back:true,
-    _gridProxy: null,
     _className:"TransitionPageTurn",
 
     /**
@@ -105,31 +103,17 @@ cc.TransitionPageTurn = cc.TransitionScene.extend(/** @lends cc.TransitionPageTu
             y = 16;
         }
 
-        var action = this.actionWithSize(cc.size(x, y)), gridProxy = this._gridProxy;
+        var action = this.actionWithSize(cc.size(x, y));
 
         if (!this._back) {
-            gridProxy.setTarget(this._outScene);
-            gridProxy.onEnter();
-            gridProxy.runAction( cc.sequence(action,cc.callFunc(this.finish, this),cc.stopGrid()));
+            this._outScene.runAction( cc.sequence(action,cc.CallFunc.create(this.finish, this),cc.StopGrid.create()));
         } else {
-            gridProxy.setTarget(this._inScene);
-            gridProxy.onEnter();
             // to prevent initial flicker
             this._inScene.visible = false;
-            gridProxy.runAction(
-                cc.sequence(action, cc.callFunc(this.finish, this), cc.stopGrid())
+            this._inScene.runAction(
+                cc.sequence(cc.show(),action, cc.callFunc(this.finish, this), cc.stopGrid())
             );
-            this._inScene.runAction(cc.show());
         }
-    },
-
-    visit: function(){
-        //cc.TransitionScene.prototype.visit.call(this);
-        if(this._back)
-            this._outScene.visit();
-        else
-            this._inScene.visit();
-        this._gridProxy.visit();
     },
 
     _sceneOrder:function () {
@@ -146,6 +130,8 @@ cc.TransitionPageTurn = cc.TransitionScene.extend(/** @lends cc.TransitionPageTu
  * @param {cc.Scene} scene
  * @param {Boolean} backwards
  * @return {cc.TransitionPageTurn}
+ * @example
+ * var myTransition = cc.TransitionPageTurn.create(1.5, nextScene, true)//true means backwards
  */
 cc.TransitionPageTurn.create = function (t, scene, backwards) {
     return new cc.TransitionPageTurn(t, scene, backwards);

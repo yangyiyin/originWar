@@ -50,9 +50,6 @@ cc.ComponentContainer = cc.Class.extend(/** @lends cc.ComponentContainer# */{
         if(!name)
             throw "cc.ComponentContainer.getComponent(): name should be non-null";
         name = name.trim();
-        if(!this._components){
-            this._components = {};
-        }
         return this._components[name];
     },
 
@@ -103,7 +100,7 @@ cc.ComponentContainer = cc.Class.extend(/** @lends cc.ComponentContainer# */{
     },
 
     _removeByComponent:function(component){
-        if(!component)
+        if(component)
             return false;
         component.onExit();
         component.setOwner(null);

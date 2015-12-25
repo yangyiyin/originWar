@@ -102,16 +102,11 @@ cc.DrawNodeCanvas = cc.Node.extend(/** @lends cc.DrawNode# */{
      */
     ctor: function () {
         cc.Node.prototype.ctor.call(this);
-        var locCmd = this._rendererCmd;
-        locCmd._buffer = this._buffer = [];
-        locCmd._drawColor = this._drawColor = cc.color(255, 255, 255, 255);
-        locCmd._blendFunc = this._blendFunc = new cc.BlendFunc(cc.BLEND_SRC, cc.BLEND_DST);
+        this._buffer = [];
+        this._drawColor = cc.color(255, 255, 255, 255);
+        this._blendFunc = new cc.BlendFunc(cc.BLEND_SRC, cc.BLEND_DST);
 
 		this.init();
-    },
-
-    _initRendererCmd: function(){
-        this._rendererCmd = new cc.DrawNodeRenderCmdCanvas(this);
     },
 
     // ----common function start ----
@@ -616,10 +611,6 @@ cc.DrawNodeWebGL = cc.Node.extend({
         this._drawColor = cc.color(255,255,255,255);
 
 	    this.init();
-    },
-    
-    _initRendererCmd: function(){
-        this._rendererCmd = new cc.DrawNodeRenderCmdWebGL(this);
     },
 
     init:function () {

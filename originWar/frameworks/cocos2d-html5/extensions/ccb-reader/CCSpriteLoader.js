@@ -32,7 +32,7 @@ var PROPERTY_BLENDFUNC = "blendFunc";
 
 cc.SpriteLoader = cc.NodeLoader.extend({
     _createCCNode:function (parent, ccbReader) {
-        return new cc.Sprite();
+        return cc.Sprite.create();
     },
 
     onHandlePropTypeColor3:function (node, parent, propertyName, ccColor3B, ccbReader) {
@@ -94,7 +94,7 @@ var PROPERTY_IS_KEYBOARD_ENABLED = "isKeyboardEnabled";
 cc.LayerLoader = cc.NodeLoader.extend({
     _createCCNode:function (parent, ccbReader) {
 
-        var layer = new cc.Layer();
+        var layer=cc.Layer.create();
 
         layer.setContentSize(0,0);
 
@@ -128,7 +128,7 @@ cc.LayerLoader.loader = function () {
 
 cc.LayerColorLoader = cc.LayerLoader.extend({
     _createCCNode:function (parent, ccbReader) {
-        return new cc.LayerColor();
+        return cc.LayerColor.create();
     },
 
     onHandlePropTypeColor3:function (node, parent, propertyName, ccColor3B, ccbReader) {
@@ -166,7 +166,7 @@ var PROPERTY_VECTOR = "vector";
 
 cc.LayerGradientLoader = cc.LayerLoader.extend({
     _createCCNode:function (parent, ccbReader) {
-        return new cc.LayerGradient();
+        return cc.LayerGradient.create();
     },
     onHandlePropTypeColor3:function (node, parent, propertyName, ccColor3B, ccbReader) {
         if (propertyName === PROPERTY_STARTCOLOR) {
@@ -210,7 +210,7 @@ cc.LayerGradientLoader.loader = function () {
 
 cc.MenuLoader = cc.LayerLoader.extend({
     _createCCNode:function (parent, ccbReader) {
-        var menu = new cc.Menu();
+        var menu = cc.Menu.create();
 
         menu.setContentSize(0,0);
 
@@ -254,7 +254,7 @@ var PROPERTY_DISABLEDDISPLAYFRAME = "disabledSpriteFrame";
 
 cc.MenuItemImageLoader = cc.MenuItemLoader.extend({
     _createCCNode:function (parent, ccbReader) {
-        return new cc.MenuItemImage();
+        return cc.MenuItemImage.create();
     },
 
     onHandlePropTypeSpriteFrame:function (node, parent, propertyName, spriteFrame, ccbReader) {
@@ -289,7 +289,7 @@ var PROPERTY_DIMENSIONS = "dimensions";
 
 cc.LabelTTFLoader = cc.NodeLoader.extend({
     _createCCNode:function (parent, ccbReader) {
-        return new cc.LabelTTF();
+        return cc.LabelTTF.create();
     },
     onHandlePropTypeColor3:function (node, parent, propertyName, ccColor3B, ccbReader) {
         if (propertyName === PROPERTY_COLOR) {
@@ -361,7 +361,7 @@ var PROPERTY_FNTFILE = "fntFile";
 
 cc.LabelBMFontLoader = cc.NodeLoader.extend({
     _createCCNode:function (parent, ccbReader) {
-        return new cc.LabelBMFont();
+        return cc.LabelBMFont.create();
     },
 
     onHandlePropTypeColor3:function (node, parent, propertyName, ccColor3B, ccbReader) {
@@ -429,7 +429,7 @@ var PROPERTY_ROTATEPERSECOND = "rotatePerSecond";
 
 cc.ParticleSystemLoader = cc.NodeLoader.extend({
     _createCCNode:function (parent, ccbReader) {
-        return new cc.ParticleSystem();
+        return cc.ParticleSystem.create();
     },
 
     onHandlePropTypeIntegerLabeled:function (node, parent, propertyName, integerLabeled, ccbReader) {
