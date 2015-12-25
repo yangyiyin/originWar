@@ -12,6 +12,17 @@
 
     "jsList" : [
         "src/resource.js",
-        "src/app.js"
+        "src/app.js",
+        "src/GameConfig.js",
+
+        "src/lib/findway.js",
+
+        "src/scene/main.js",
+
+        "src/layer/bg.js",
+        "src/layer/action.js",
+
+        "src/sprite/bg.js",
+        "src/sprite/enemy.js"
     ]
 }
