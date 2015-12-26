@@ -1,5 +1,5 @@
 /**
- * 角色类,构造函数
+ * 角色类,构造函数，接口定义类
  * User: yyy
  * Date: 15-12-25
  * Time: 下午10:56
@@ -17,7 +17,7 @@ var RoleClass = function(){
     this.move = function(){}//移动
 }
 var RolePlayerClass = function(){
-    this.__proto__ = new RoleClass();
+    RoleClass.call(this);
     this.baseInfo = {
         hp:0,//生命值
         mp:0,//魔法值
@@ -33,7 +33,7 @@ var RolePlayerClass = function(){
     this.define = function(){}//防御
 }
 var RoleEnemyClass = function(){
-    this.__proto__ = new RoleClass();
+    RoleClass.call(this);
     this.baseInfo = {
         hp:0,//生命值
         mp:0,//魔法值

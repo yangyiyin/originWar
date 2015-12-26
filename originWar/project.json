@@ -15,12 +15,23 @@
         "src/app.js",
         "src/GameConfig.js",
 
+        "src/class/gamep.class.js",
+        "src/class/log.class.js",
+        "src/class/map.class.js",
+        "src/class/music.class.js",
+        "src/class/role.class.js",
+
         "src/lib/findway.js",
 
         "src/scene/main.js",
+        "src/scene/start.js",
 
+        "src/layer/bgBase.js",
         "src/layer/bg.js",
         "src/layer/action.js",
+        "src/layer/gamepBase.js",
+        "src/layer/gamepPlaying.js",
+        "src/layer/gamepSetting.js",
 
         "src/sprite/bg.js",
         "src/sprite/enemy.js"

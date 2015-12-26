@@ -275,5 +275,5 @@ var findway = function(options){
     }
     //获得所有的节点
     _this.getChildPoints();
-    return _this.way;
+//    return _this.way;
 }
