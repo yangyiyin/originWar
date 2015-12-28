@@ -4,9 +4,11 @@
  * Date: 15-10-18
  * Time: 上午9:30
  */
-var bgBaseLayer = cc.Layer.extend({
+
+var BgClassOptions = {
     ctor:function () {
         this._super();
-        BgClass.call(this);
     }
-});
+};
+BgClass.call(BgClassOptions);
+var bgBaseLayer = cc.Layer.extend(BgClassOptions);

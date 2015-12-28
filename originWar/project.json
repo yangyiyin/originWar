@@ -34,6 +34,9 @@
         "src/layer/gamepSetting.js",
 
         "src/sprite/bg.js",
-        "src/sprite/enemy.js"
+        "src/sprite/enemy.js",
+
+        "src/app/bg.js",
+        "src/app/gamepSetting.js"
     ]
 }

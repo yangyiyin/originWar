@@ -4,7 +4,7 @@
     <list default="true" id="751b4520-f5a4-44c0-a789-7aaedfec43a1" name="Default" comment="" />
     <ignored path="originWar.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="751b4520-f5a4-44c0-a789-7aaedfec43a1" time="1451136273509" ignored="false" />
+    <file path="/Dummy.txt" changelist="751b4520-f5a4-44c0-a789-7aaedfec43a1" time="1451206273709" ignored="false" />
     <file path="/map.class.js" changelist="751b4520-f5a4-44c0-a789-7aaedfec43a1" time="1451140292645" ignored="false" />
     <file path="/role.class.js" changelist="751b4520-f5a4-44c0-a789-7aaedfec43a1" time="1451137251779" ignored="false" />
     <file path="/music.class.js" changelist="751b4520-f5a4-44c0-a789-7aaedfec43a1" time="1451057939625" ignored="false" />
@@ -15,10 +15,11 @@
     <file path="/gamepBase.js" changelist="751b4520-f5a4-44c0-a789-7aaedfec43a1" time="1451139065937" ignored="false" />
     <file path="/main.js" changelist="751b4520-f5a4-44c0-a789-7aaedfec43a1" time="1451138477151" ignored="false" />
     <file path="/findway.js" changelist="751b4520-f5a4-44c0-a789-7aaedfec43a1" time="1451139674646" ignored="false" />
-    <file path="/bgBase.js" changelist="751b4520-f5a4-44c0-a789-7aaedfec43a1" time="1451140382430" ignored="false" />
-    <file path="/gamepSetting.js" changelist="751b4520-f5a4-44c0-a789-7aaedfec43a1" time="1451143421789" ignored="false" />
+    <file path="/bgBase.js" changelist="751b4520-f5a4-44c0-a789-7aaedfec43a1" time="1451221877834" ignored="false" />
+    <file path="/gamepSetting.js" changelist="751b4520-f5a4-44c0-a789-7aaedfec43a1" time="1451220268753" ignored="false" />
     <file path="/startSetting.js" changelist="751b4520-f5a4-44c0-a789-7aaedfec43a1" time="1451144163825" ignored="false" />
-    <file path="/bg.js" changelist="751b4520-f5a4-44c0-a789-7aaedfec43a1" time="1451143830498" ignored="false" />
+    <file path="/bg.js" changelist="751b4520-f5a4-44c0-a789-7aaedfec43a1" time="1451227698541" ignored="false" />
+    <file path="/resource.js" changelist="751b4520-f5a4-44c0-a789-7aaedfec43a1" time="1451222954185" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,52 +42,16 @@
       <file leaf-file-name="gamepSetting.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/originWar/src/layer/gamepSetting.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="5" selection-start="132" selection-end="132" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="app.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/originWar/src/app.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GameConfig.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/originWar/src/GameConfig.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="resource.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/originWar/src/resource.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="14" column="4" selection-start="222" selection-end="222" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="bg.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/originWar/src/layer/bg.js">
+        <entry file="file://$PROJECT_DIR$/originWar/src/sprite/bg.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="23" selection-start="99" selection-end="99" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="bgBase.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/originWar/src/layer/bgBase.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="5" selection-start="191" selection-end="191" vertical-scroll-proportion="0.0">
+            <state line="7" column="0" selection-start="112" selection-end="158" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -95,25 +60,16 @@
       <file leaf-file-name="action.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/originWar/src/layer/action.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="8" selection-start="934" selection-end="959" vertical-scroll-proportion="0.0">
+            <state line="13" column="7" selection-start="219" selection-end="272" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="project.json" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/originWar/project.json">
+      <file leaf-file-name="enemy.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/originWar/src/sprite/enemy.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="33" column="36" selection-start="783" selection-end="783" vertical-scroll-proportion="-18.352942">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="gamepSetting.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/originWar/src/app/gamepSetting.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="20" selection-start="159" selection-end="159" vertical-scroll-proportion="0.31105992">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -122,7 +78,58 @@
       <file leaf-file-name="bg.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/originWar/src/app/bg.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="14" selection-start="80" selection-end="90" vertical-scroll-proportion="0.0">
+            <state line="10" column="35" selection-start="227" selection-end="227" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bg.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/originWar/src/layer/bg.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="14" column="41" selection-start="313" selection-end="313" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bgBase.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/originWar/src/layer/bgBase.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="12" column="29" selection-start="184" selection-end="184" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="role.plist" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/originWar/res/role.plist">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0">
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="gameSetting.plist" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/originWar/res/gameSetting.plist">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="28" column="30" selection-start="723" selection-end="736" vertical-scroll-proportion="-18.461538">
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="gamepSetting.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/originWar/src/app/gamepSetting.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="34" selection-start="286" selection-end="286" vertical-scroll-proportion="0.34562212">
               <folding />
             </state>
           </provider>
@@ -146,22 +153,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/originWar/src/class/music.class.js" />
-        <option value="$PROJECT_DIR$/originWar/src/class/role.class.js" />
         <option value="$PROJECT_DIR$/originWar/src/lib/findway.js" />
-        <option value="$PROJECT_DIR$/originWar/src/class/map.class.js" />
-        <option value="$PROJECT_DIR$/originWar/src/layer/gamepBase.js" />
-        <option value="$PROJECT_DIR$/originWar/src/layer/bgBase.js" />
-        <option value="$PROJECT_DIR$/originWar/src/scene/start.js" />
         <option value="$PROJECT_DIR$/originWar/src/layer/gamep.js" />
         <option value="$PROJECT_DIR$/originWar/src/layer/gamepPlaying.js" />
         <option value="$PROJECT_DIR$/originWar/src/class/gamep.class.js" />
-        <option value="$PROJECT_DIR$/originWar/src/layer/gamepSetting.js" />
-        <option value="$PROJECT_DIR$/originWar/project.json" />
         <option value="$PROJECT_DIR$/originWar/src/app/startSetting.js" />
+        <option value="$PROJECT_DIR$/originWar/src/app.js" />
+        <option value="$PROJECT_DIR$/originWar/project.json" />
+        <option value="$PROJECT_DIR$/originWar/src/scene/start.js" />
+        <option value="$PROJECT_DIR$/originWar/src/class/map.class.js" />
+        <option value="$PROJECT_DIR$/originWar/src/layer/bgBase.js" />
+        <option value="$PROJECT_DIR$/originWar/src/layer/gamepBase.js" />
+        <option value="$PROJECT_DIR$/originWar/src/layer/gamepSetting.js" />
+        <option value="$PROJECT_DIR$/originWar/src/resource.js" />
+        <option value="$PROJECT_DIR$/originWar/src/app/gamepSetting.js" />
         <option value="$PROJECT_DIR$/originWar/src/layer/bg.js" />
         <option value="$PROJECT_DIR$/originWar/src/app/bg.js" />
-        <option value="$PROJECT_DIR$/originWar/src/app/gamepSetting.js" />
       </list>
     </option>
   </component>
@@ -381,6 +388,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="originWar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="originWar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="originWar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -395,6 +420,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\originWar\originWar\res" />
       <recent name="F:\originWar\originWar\src\app" />
       <recent name="F:\originWar\originWar\src\layer" />
       <recent name="F:\originWar\originWar\src\class" />
@@ -450,16 +476,15 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="版本控制" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32960895" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32960895" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23319103" sideWeight="0.6703911" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23852721" sideWeight="0.6703911" order="0" side_tool="false" content_ui="combo" />
       <window_info id="调试" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -467,6 +492,7 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32960895" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -534,116 +560,114 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/originWar/src/lib/findway.js">
+    <entry file="file://$PROJECT_DIR$/originWar/src/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="26" selection-start="119" selection-end="119" vertical-scroll-proportion="0.40342298">
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/originWar/src/class/map.class.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="11" selection-start="4" selection-end="11" vertical-scroll-proportion="0.0">
+        <state line="16" column="7" selection-start="524" selection-end="584" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/originWar/src/scene/start.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="28" selection-start="112" selection-end="112" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+    <entry file="file://$PROJECT_DIR$/originWar/res/CloseSelected.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/originWar/src/layer/gamepBase.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="5" selection-start="160" selection-end="160" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+    <entry file="file://$PROJECT_DIR$/originWar/res/bg.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/originWar/src/layer/gamepPlaying.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="47" selection-start="225" selection-end="225" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/originWar/src/class/gamep.class.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="20" selection-start="186" selection-end="186" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/originWar/src/layer/bgBase.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="5" selection-start="191" selection-end="191" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/originWar/src/layer/gamepSetting.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="5" selection-start="132" selection-end="132" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+    <entry file="file://$PROJECT_DIR$/originWar/res/CloseNormal.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/originWar/src/resource.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="7" column="41" selection-start="277" selection-end="277" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/originWar/src/GameConfig.js">
+    <entry file="file://$PROJECT_DIR$/originWar/frameworks/cocos2d-html5/cocos2d/menus/CCMenuItem.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="727" column="16" selection-start="21851" selection-end="21863" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/originWar/res/role.plist">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
+      <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
+        <state />
+      </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/originWar/project.json">
+    <entry file="file://$PROJECT_DIR$/originWar/src/sprite/enemy.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="36" selection-start="783" selection-end="783" vertical-scroll-proportion="-18.352942">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/originWar/src/layer/bg.js">
+    <entry file="file://$PROJECT_DIR$/originWar/src/sprite/bg.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="23" selection-start="99" selection-end="99" vertical-scroll-proportion="0.0">
+        <state line="7" column="0" selection-start="112" selection-end="158" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/originWar/src/layer/action.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="8" selection-start="934" selection-end="959" vertical-scroll-proportion="0.0">
+        <state line="13" column="7" selection-start="219" selection-end="272" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/originWar/src/app.js">
+    <entry file="file://$PROJECT_DIR$/originWar/src/layer/bgBase.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="12" column="29" selection-start="184" selection-end="184" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/originWar/src/layer/bg.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="41" selection-start="313" selection-end="313" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/originWar/res/gameSetting.plist">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="30" selection-start="723" selection-end="736" vertical-scroll-proportion="-18.461538">
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/originWar/src/layer/gamepSetting.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="4" selection-start="222" selection-end="222" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/originWar/src/app/bg.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="14" selection-start="80" selection-end="90" vertical-scroll-proportion="0.0">
+        <state line="10" column="35" selection-start="227" selection-end="227" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/originWar/src/app/gamepSetting.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="20" selection-start="159" selection-end="159" vertical-scroll-proportion="0.31105992">
+        <state line="10" column="34" selection-start="286" selection-end="286" vertical-scroll-proportion="0.34562212">
           <folding />
         </state>
       </provider>
