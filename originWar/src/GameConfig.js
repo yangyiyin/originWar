@@ -17,3 +17,16 @@ GC.w_2 = GC.winSize.width / 2 ;
 GC.h_2 = GC.winSize.height / 2;
 
 GC.SOUND_ON = true;
+
+
+
+GC.GAME_STATUS = {//游戏状态
+    ACTION:1,
+    PARSE:2
+}
+GC.GAME_SPEED = {//游戏速度
+    LEVEL1:1,
+    LEVEL2:2,
+    LEVEL3:3
+}
+GC.INIT_GOLD=100;//初始化金币

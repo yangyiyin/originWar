@@ -11,5 +11,14 @@ var appGampSettingLayer = gamepSettingLayer.extend({
         this.addChild(this.bg, 2);
     },
     bg:new appBgLayer(),
-    menus:['bg','menuStart','menuSetting','menuQuit']
+    menus:['menuStart','menuSetting','menuQuit']
+});
+var appGampSettingSettingLayer = gamepSettingLayer.extend({
+    ctor:function () {
+        this._super();
+        this.initMenu();//初始化菜单项
+        this.addChild(this.bg, 2);
+    },
+    bg:new appBgLayer(),
+    menus:['Setting']
 });

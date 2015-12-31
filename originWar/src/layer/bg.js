@@ -20,5 +20,25 @@ var bgLayer = bgBaseLayer.extend({
         menu.x = GC.w_2;
         menu.y = GC.h_2;
         return menu;
+    },
+    audioEngine : new musicLayer(),
+    playBgMusic : function(){
+        this.audioEngine.playMusic(this.background_music,true);
+    },
+    stopBgMusic : function(){
+        this.audioEngine.stopMusic();
+    },
+    getEffectsVolume:function(){
+        this.audioEngine.getEffectsVolume()
+    },
+    getMusicVolume:function(){
+        this.audioEngine.getMusicVolume()
+    },
+    setEffectsVolume:function(volume){
+        this.audioEngine.setEffectsVolume(volume);
+    },
+    setMusicVolume:function(volume){
+        this.audioEngine.setMusicVolume(volume);
     }
+
 });

@@ -2,9 +2,9 @@
   "init_cfg": {
     "isLandscape": false,
     "isWindowTop": false,
-    "name": "beatcpu",
-    "width": 640,
-    "height": 960,
+    "name": "war",
+    "width": 960,
+    "height": 640,
     "entry": "main.js",
     "consolePort": 6050,
     "uploadPort": 6060,
