@@ -21,6 +21,8 @@
         "src/lib/findway.js",
         "src/scene/main.js",
         "src/scene/start.js",
+        "src/scene/playing.js",
+
         "src/layer/musicBase.js",
         "src/layer/music.js",
         "src/layer/bgBase.js",
@@ -29,9 +31,18 @@
         "src/layer/gamepBase.js",
         "src/layer/gamepPlaying.js",
         "src/layer/gamepSetting.js",
+
         "src/sprite/bg.js",
         "src/sprite/enemy.js",
+        "src/sprite/roleEnemyBase.js",
+        "src/sprite/roleEnemy.js",
+        "src/sprite/rolePlayerBase.js",
+        "src/sprite/rolePlayer.js",
         "src/app/bg.js",
-        "src/app/gamepSetting.js"
+        "src/app/bgPlaying.js",
+        "src/app/rolePlayer.js",
+        "src/app/roleEnemy.js",
+        "src/app/gamepSetting.js",
+        "src/app/gamepPlaying.js"
     ]
 }

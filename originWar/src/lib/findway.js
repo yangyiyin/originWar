@@ -26,8 +26,8 @@ var findway = function(options){
 
     //<div id="obstract" style='background: #999;position: absolute;left: 245px;bottom: 475px;width: 150px;height:50px'></div>
     _this.end_point = {
-        x:400,
-        y:320
+        x:320,
+        y:50
     }
     if(options){
         if(options.start_point) _this.start_point = options.start_point;
@@ -36,9 +36,9 @@ var findway = function(options){
     }
 
     //横向或纵向距离
-    _this.g1 =24;
+    _this.g1 =10;
     //斜向距离
-    _this.g2 =34;
+    _this.g2 =14;
     _this.current_point = _this.start_point;
     var open_list = [],close_list = [_this.current_point];
 
@@ -176,7 +176,11 @@ var findway = function(options){
         ////console.log(4);
         //定向父节点
         point.f_point = _this.current_point;
-        if(point.x != _this.current_point.x && point.y != _this.current_point.y) point.oblique = 1;
+        if(point.x != _this.current_point.x && point.y != _this.current_point.y){
+            point.oblique = 1;
+        }else{
+            point.oblique = 0;
+        }
         // //console.log(point);
         //加入开启列表
         open_list.push(point);
@@ -274,6 +278,11 @@ var findway = function(options){
         }
     }
     //获得所有的节点
-    _this.getChildPoints();
+  //  _this.getChildPoints();
+    _this.doFindway = function(){
+        _this.current_point = _this.start_point;
+        _this.getChildPoints();
+        return _this.way;
+    }
 //    return _this.way;
 }

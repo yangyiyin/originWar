@@ -6,16 +6,19 @@ var gamepPlayingLayer = gamepBaseLayer.extend({
     ctor:function () {
         this._super();
     },
-    status:GC.GAME_STATUS.ACTION,
-    getWay:function(option){
-        var findway = new findway(option);
-        return findway.way;
+    initRole:function(){
+        this.initPlayer();
+        this.initEnemy();
     },
-    speed:GC.GAME_SPEED.LEVEL2,
-    gold:GC.INIT_GOLD,
+    initPlayer:function(){
+        this.createPlayer();
+    },
+    initEnemy:function(){
+        this.createEnemy();
+    },
     list : {
         players:[],
-        enemies:[],
-        map:[]
-    }
+        enemies:[]
+    },
+    findway:findway
 });

@@ -8,17 +8,14 @@ var gamepSettingLayer = gamepBaseLayer.extend({
         this._super();
     },
     menus:[],//['start','setting','quit']
-    bg:null,
+    bg:function(){},
     /**
      * 初始化菜单
      */
     initMenu:function(){
         if(!this.bg) return;
         if(this.menus.length){
-            var menus = this.menus;
-            for(var i in menus){
-                this.bg.addElement(menus[i]);
-            }
+            this.bg().addElements(this.menus);
         }
     }
 });

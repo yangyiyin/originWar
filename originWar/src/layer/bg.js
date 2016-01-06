@@ -15,6 +15,14 @@ var bgLayer = bgBaseLayer.extend({
             if(ele) this.addChild(ele,1);
         }
     },
+    addElements : function(names){
+        for(var i in names){
+            if(this[names[i]]){
+                var ele = this[names[i]]();
+                if(ele) this.addChild(ele,1);
+            }
+        }
+    },
     getMenu:function(){
         var menu = new cc.Menu();
         menu.x = GC.w_2;

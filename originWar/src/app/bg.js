@@ -7,7 +7,6 @@
 var appBgLayer = bgLayer.extend({
     ctor:function () {
         this._super();
-
         this.menu = this.getMenu();
         this.addChild(this.menu,3);
         this.playBgMusic();
@@ -16,7 +15,7 @@ var appBgLayer = bgLayer.extend({
     effect_file:res.effect_mp3,
     background_music : res.background_music_1,
     bg:function(){
-        var sprite = cc.Sprite(res.bg_png);
+        var sprite = new cc.Sprite(res.bg_png);
         sprite.attr({
             x: GC.w_2,
             y: GC.h_2
@@ -29,7 +28,7 @@ var appBgLayer = bgLayer.extend({
             select_img : new cc.Sprite('#menuStart_2.png'),
             callback : function(){
                 this.audioEngine.playEffect(this.effect_file);
-                this.getMusicVolume();
+                cc.director.runScene(new PlayingScene());
             },
             y : 90
         }

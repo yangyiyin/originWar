@@ -36,4 +36,3 @@ var musicLayer = musicBaseLayer.extend({
     }
 
 });
-console.log(musicLayer);
