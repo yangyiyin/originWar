@@ -14,6 +14,9 @@ var gamepClassOptions = {
         GC.TTFLOG.x = 10;
         GC.TTFLOG.y = GC.h/4;
         GC.TTFLOG.color = cc.color(0, 0, 0, 255);
+        GC.TTFLOG.setStr=function(){
+            //todo 设置自动消失
+        }
         this.addChild(GC.TTFLOG,100);
     }
 };

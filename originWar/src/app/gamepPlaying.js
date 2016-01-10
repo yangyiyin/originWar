@@ -7,9 +7,13 @@ var appGamepPlayingLayer = gamepPlayingLayer.extend({
         this._super();
         this.addChild(this.bg(), 1);
         cc.spriteFrameCache.addSpriteFrames(res.role_plist);//加载plist到精灵帧cache中
+        ccs.armatureDataManager.addArmatureFileInfo(res.Animation_json);
+        ccs.armatureDataManager.addArmatureFileInfo(res.Bullet1Animation_ExportJson);
         this.initInterface();//初始化界面
         this.initRole();
         this.runningGame();
+
+
     },
     _bg:null,
     bg:function(){
@@ -20,10 +24,15 @@ var appGamepPlayingLayer = gamepPlayingLayer.extend({
         this.bg().addElements(['goldLabel','bg']);//金币
     },
     createPlayer:function(res){
-        return new appRolePlayerSprite(res);
+      return new appRolePlayerSprite(res);
+
     },
     createEnemy:function(res){
-        return new appRoleEnemySprite(res);
+        var armature = new appRoleEnemyArmature();
+        armature.init(res.role);
+        armature._bullet = res.bullet;
+        return armature;
+    //    return new appRoleEnemyArmature(res);
     },
     initPlayer:function(){//初始化
         //todo 根据log记录和关口等其他因素
@@ -32,12 +41,13 @@ var appGamepPlayingLayer = gamepPlayingLayer.extend({
             x: 320,
             y: 50
         });
-        this.addChild(player.ins,4);
+        this.addChild(player.ins,3);
         this.list.players.push(player);
     },
     initEnemy:function(){
         //todo 根据log记录和关口等其他因素
-        var enemy = {name:'1hao',ins:this.createEnemy('#enemy1.png')};
+     //   var enemy = {name:'1hao',ins:this.createEnemy('#enemy1.png')};
+        var enemy = {name:'1hao',ins:this.createEnemy({role:'NewAnimation','bullet':'Bullet1Animation'})};
         // console.log('123123');
         enemy.ins.attr({
             x: 320,
@@ -50,7 +60,9 @@ var appGamepPlayingLayer = gamepPlayingLayer.extend({
         this.moveByWay();
         this.scheduleUpdate();
     },
+//    index:0,
     update:function(dt){
+     //   this.index++;
         this.checkAttack();//定时任务
     },
     moveByWay:function(){
@@ -70,7 +82,7 @@ var appGamepPlayingLayer = gamepPlayingLayer.extend({
     checkAttack:function(){//检测攻击
         var enemy = this.list.enemies[0].ins;
         var player = this.list.players[0].ins;
-        var distance = Math.sqrt(Math.pow((enemy.x-player.x),2) + Math.pow((enemy.y-player.y),2));
+        var distance = CommonFunction.getDistanceBy2Point(enemy,player);
         if(distance <= enemy.attack_area){
             enemy.attack_list.push(player);
         }
@@ -83,7 +95,7 @@ var appGamepPlayingLayer = gamepPlayingLayer.extend({
     doAttack:function(){//攻击
         var enemy = this.list.enemies[0].ins;
         if(enemy.attack_list.length > 0){
-            enemy.attack();
+            enemy.attack(enemy.attack_list[0]);
         }
     }
 

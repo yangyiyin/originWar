@@ -7,7 +7,7 @@
     "renderMode":0,
     "engineDir":"frameworks/cocos2d-html5",
     "modules":[
-        "cocos2d"
+        "cocos2d","extensions"
     ],
     "jsList":[
         "src/resource.js",
@@ -18,6 +18,8 @@
         "src/class/map.class.js",
         "src/class/music.class.js",
         "src/class/role.class.js",
+        "src/class/bullet.class.js",
+
         "src/lib/findway.js",
         "src/scene/main.js",
         "src/scene/start.js",
@@ -38,11 +40,16 @@
         "src/sprite/roleEnemy.js",
         "src/sprite/rolePlayerBase.js",
         "src/sprite/rolePlayer.js",
+        "src/sprite/bulletBase.js",
+        "src/sprite/bullet.js",
+
         "src/app/bg.js",
         "src/app/bgPlaying.js",
         "src/app/rolePlayer.js",
         "src/app/roleEnemy.js",
         "src/app/gamepSetting.js",
-        "src/app/gamepPlaying.js"
+        "src/app/gamepPlaying.js",
+        "src/app/bullet.js"
+
     ]
 }

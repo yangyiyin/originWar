@@ -34,3 +34,34 @@ var roleEnemySprite = roleEnemyBaseSprite.extend({
 
 
 });
+var roleEnemyArmature = roleEnemyBaseArmature.extend({
+    ctor:function () {
+        this._super();
+    },
+    MoveToPoint : function(way){
+        this.getAnimation().play("Animation1");
+        var action_arr = [];
+        var action = '';
+        var point;
+        var time;//每移动一个单元的时间
+        for(var i=0;i<way.length;i++){
+            point = way[i];
+            if(point.oblique){
+                time = 1.4 * this.speed;
+            }else{
+                time = this.speed;
+            }
+            action = new cc.MoveTo(time, cc.p(point.x, point.y));
+            action_arr.push(action);
+        }
+        this.runAction(cc.Sequence(action_arr));
+    },
+    attack_area:150,
+    attack_list:[],
+    attack:function(){
+        this.stopAllActions();
+    },
+    speed:0.1,//0.1秒每移动一次
+
+
+});

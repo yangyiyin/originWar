@@ -36,9 +36,9 @@ var findway = function(options){
     }
 
     //横向或纵向距离
-    _this.g1 =10;
+    _this.g1 =40;
     //斜向距离
-    _this.g2 =14;
+    _this.g2 =56;
     _this.current_point = _this.start_point;
     var open_list = [],close_list = [_this.current_point];
 
