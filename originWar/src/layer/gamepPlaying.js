@@ -20,5 +20,5 @@ var gamepPlayingLayer = gamepBaseLayer.extend({
         players:[],
         enemies:[]
     },
-    findway:findway
+    findway:findwayAppointed
 });

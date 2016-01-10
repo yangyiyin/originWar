@@ -20,7 +20,7 @@
         "src/class/role.class.js",
         "src/class/bullet.class.js",
 
-        "src/lib/findway.js",
+        "src/lib/findwayAppointed.js",
         "src/scene/main.js",
         "src/scene/start.js",
         "src/scene/playing.js",

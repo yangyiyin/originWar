@@ -7,7 +7,8 @@
 var appRolePlayerSprite = rolePlayerSprite.extend({
     ctor:function (res) {
         this._super(res);
-    }
+    },
+    hp:100
 
 
 });

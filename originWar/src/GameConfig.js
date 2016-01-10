@@ -30,7 +30,10 @@ GC.GAME_SPEED = {//游戏速度
     LEVEL3:3
 }
 GC.INIT_GOLD=100;//初始化金币
-
+GC.ATTACK_TYPE = {
+    close:1,
+    far:2
+}
 
 GC.TTFLOG = null;
 
