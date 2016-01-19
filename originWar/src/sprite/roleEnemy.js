@@ -4,40 +4,41 @@
  * Date: 15-10-18
  * Time: 上午9:30
  */
-var roleEnemySprite = roleEnemyBaseSprite.extend({
-    ctor:function (res) {
-        this._super(res);
-    },
-    MoveToPoint : function(way){
-        var action_arr = [];
-        var action = '';
-        var point;
-        var time;//每移动一个单元的时间
-        for(var i=0;i<way.length;i++){
-            point = way[i];
-            if(point.oblique){
-                time = 1.4 * this.speed;
-            }else{
-                time = this.speed;
-            }
-            action = new cc.MoveTo(time, cc.p(point.x, point.y));
-            action_arr.push(action);
-        }
-        this.runAction(cc.Sequence(action_arr));
-    },
-    attack_area:150,
-    attack_list:[],
-    attack:function(){
-        this.stopAllActions();
-    },
-    speed:0.1,//0.1秒每移动一次
-
-
-});
+//var roleEnemySprite = roleEnemyBaseSprite.extend({
+//    ctor:function (res) {
+//        this._super(res);
+//    },
+//    MoveToPoint : function(way){
+//        var action_arr = [];
+//        var action = '';
+//        var point;
+//        var time;//每移动一个单元的时间
+//        for(var i=0;i<way.length;i++){
+//            point = way[i];
+//            if(point.oblique){
+//                time = 1.4 * this.speed;
+//            }else{
+//                time = this.speed;
+//            }
+//            action = new cc.MoveTo(time, cc.p(point.x, point.y));
+//            action_arr.push(action);
+//        }
+//        this.runAction(cc.Sequence(action_arr));
+//    },
+//    attack_area:150,
+//    attack_list:[],
+//    attack:function(){
+//        this.stopAllActions();
+//    },
+//    speed:0.1,//0.1秒每移动一次
+//
+//
+//});
 var roleEnemyArmature = roleEnemyBaseArmature.extend({
     ctor:function () {
         this._super();
     },
+    _action : false,
     MoveToPoint : function(){
         this.getAnimation().play("walk");
         this.is_moving = 1;
@@ -64,16 +65,23 @@ var roleEnemyArmature = roleEnemyBaseArmature.extend({
             action_arr.push(action);
         }
         this.runAction(cc.Sequence(action_arr));
+        this._action = true;
     },
     setRotation:function(_this,rotation){
         this.rotation = rotation;
     },
-    attack_area:150,
+    attack_area:40,
     attack_list:[],
-    attack:function(){
-        this.stopAllActions();
+    attack:function(target){
+        if(this._action) this.stopAllActions();
+        this._action = false;
         this.is_moving = 0;
         this.is_attacking = 1;
+        var rotation = CommonFunction.getRotation(this,target);
+        var action = new cc.RotateTo(0.2, rotation);
+        var action_arr = [];
+        action_arr.push(action);
+        this.runAction(cc.Sequence(action_arr));
     },
     speed:0.1,//0.1秒每移动一次
     is_moving:0,

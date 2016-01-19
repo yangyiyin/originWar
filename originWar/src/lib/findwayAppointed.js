@@ -19,6 +19,7 @@ var findwayAppointed = function(){
     this.continueWay = function(point,way){
         var pre_ponit = null,after_point = null,next_i = null;
         var continue_way = [];
+        if(way.length == 1) return way;
         for(var i in way){
             if(!way[parseInt(i)+1] && !next_i) break;
             if(!next_i){
@@ -40,5 +41,7 @@ var findwayAppointed = function(){
 }
 
 var ways = {
-    way1:[{x:100,y:600},{x:280,y:250},{x:320,y:0}]
+    way1:[{x:100,y:600},{x:280,y:250},{x:320,y:0}],
+    way2:[{x:300,y:600},{x:320,y:0}],
+    way3:[{x:600,y:600},{x:480,y:350},{x:320,y:0}]
 };

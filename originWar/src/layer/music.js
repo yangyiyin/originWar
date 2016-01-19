@@ -25,14 +25,14 @@ var musicLayer = musicBaseLayer.extend({
         console.log(this.audioEngine.getEffectsVolume());
     },
     getMusicVolume:function(){
-        console.log(this.audioEngine.getMusicVolume());
+   //     console.log(this.audioEngine.getMusicVolume());
     },
     setEffectsVolume:function(volume){
         this.audioEngine.setEffectsVolume(volume);
     },
     setMusicVolume:function(volume){
         this.audioEngine.setMusicVolume(volume);
-        console.log(this.audioEngine.getMusicVolume());
+      //  console.log(this.audioEngine.getMusicVolume());
     }
 
 });

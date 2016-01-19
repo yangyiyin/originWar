@@ -6,6 +6,7 @@ var res = {
     gameSetting_png:"res/gameSetting.plist",
     CloseNormal_png:"res/CloseNormal.png",
     CloseSelected_png:"res/CloseSelected.png",
+    progress_png:"res/progress.png",
 //    effect_mp3:"res/music/effect.mp3",
     effect_mp3:"res/music/effect2.wav",
     background_music_1 : "res/music/bg2.mp3",
