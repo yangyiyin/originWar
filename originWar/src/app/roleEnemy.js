@@ -76,15 +76,21 @@ var appRoleEnemyArmature = roleEnemyArmature.extend({
         loadingBar.setName("LoadingBar");
         loadingBar.loadTexture(res.progress_png);
         loadingBar.setPercent(100);
-        loadingBar.x = 0;
-        loadingBar.y = 30;
-        loadingBar.scaleX = 0.3;
+        this.setHpPos(loadingBar);
+        loadingBar.scaleX = 0.2;
+        loadingBar.scaleY = 0.5;
         loadingBar.setColor(cc.color(0,255,0));
         this.hpBox = loadingBar;
         return loadingBar;
     },
+    setHpPos:function(hpHox){
+        if(!hpHox)hpHox = this.hpBox;
+        if(!hpHox) return ;
+        hpHox.x = this.x;
+        hpHox.y = this.y+20;
+    },
     initHpBox:function(){
-        this.addChild(this.hpProgress(),50);
+        this.parent.addChild(this.hpProgress(),50);
     },
     setHpBox:function(){
         var percent = this.hp*100/this.whole_hp;

@@ -29,14 +29,12 @@ var appGamepPlayingLayer = gamepPlayingLayer.extend({
      // return new appRolePlayerSprite(res);
         var armature = new appRolePlayerArmature();
         armature.init(_res.role);
-        armature.initHpBox();
         if(_res.bullet) armature._bullet = _res.bullet;
         return armature;
     },
     createEnemy:function(_res){
         var armature = new appRoleEnemyArmature();
         armature.init(_res.role);
-        armature.initHpBox();
         if(_res.bullet) armature._bullet = _res.bullet;
         return armature;
     },
@@ -48,12 +46,14 @@ var appGamepPlayingLayer = gamepPlayingLayer.extend({
             y: 50
         });
         this.addChild(player.ins,2);
+        player.ins.initHpBox();
         var player2 = {name:'wukong2',ins:this.createPlayer({role:'enemy_test','bullet':''})};
         player2.ins.attr({
             x: 300,
             y: 100
         });
         this.addChild(player2.ins,2);
+        player2.ins.initHpBox();
         this.list.players.push(player2);
         this.list.players.push(player);
      //  this.list.players.push(player2);
@@ -68,6 +68,7 @@ var appGamepPlayingLayer = gamepPlayingLayer.extend({
         enemy.ins.scale = 0.5;
         this._init_enemy_count ++;
         this.addChild(enemy.ins,10);
+        enemy.ins.initHpBox();
         this.list.enemies.push(enemy);
     },
     runningGame:function(){
@@ -76,7 +77,7 @@ var appGamepPlayingLayer = gamepPlayingLayer.extend({
     },
     index:0,
     update:function(dt){
-        this.checkDie();
+        this.RoleUpdates();
         this.checkAttack();//定时任务
 
         if(this.index >= 120)this.index = 0;
@@ -153,20 +154,29 @@ var appGamepPlayingLayer = gamepPlayingLayer.extend({
             role.attack(role.attack_list[0]);
         }
     },
-    checkDie:function(){
-        for(var i in this.list.players){
-            if(this.list.players[i] && this.list.players[i].ins.hp <= 0){
-                this.list.players[i].ins.visible = false;
-                this.list.players.splice(i,1);
-            }
-        }
-        for(var i in this.list.enemies){
-            if(this.list.enemies[i] && this.list.enemies[i].ins.hp <= 0){
-                this.list.enemies[i].ins.visible = false;
-                this.list.enemies.splice(i,1);
-            }
+    checkDie:function(list,i){
+        if(list[i] && list[i].ins.hp <= 0){
+            list[i].ins.visible = false;
+            list.splice(i,1);
         }
     },
+    moveHp:function(role){
+        if(role){
+            role.setHpPos();
+        }
+    },
+    RoleUpdates:function(){
+        for(var i in this.list.players){
+            this.checkDie(this.list.players,i);//检测死亡
+            this.moveHp(this.list.players[i].ins);//固定血条位置
+        }
+        for(var i in this.list.enemies){
+            if(!this.list.enemies || !this.list.enemies.length)return;
+            this.checkDie(this.list.enemies,i);//检测死亡
+            this.moveHp(this.list.enemies[i].ins);//固定血条位置
+        }
+    },
+
     /**
      * 检测是否空闲
      */
