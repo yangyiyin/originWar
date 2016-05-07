@@ -14,8 +14,17 @@ var gamepClassOptions = {
         GC.TTFLOG.x = 10;
         GC.TTFLOG.y = GC.h/4;
         GC.TTFLOG.color = cc.color(0, 0, 0, 255);
-        GC.TTFLOG.setStr=function(){
-            //todo 设置自动消失
+        GC.TTFLOG.dying = 0;
+        GC.TTFLOG.setStr=function(string){
+            GC.TTFLOG.visible = true;
+            if (GC.TTFLOG.dying) {
+                clearTimeout(GC.TTFLOG.dying);
+            }
+            var pre_string =  GC.TTFLOG.getString();
+            GC.TTFLOG.setString(pre_string + '\n' + string);
+            GC.TTFLOG.dying = setTimeout(function(){
+                GC.TTFLOG.visible = false;
+            },2000);
         }
         this.addChild(GC.TTFLOG,100);
     }

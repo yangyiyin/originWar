@@ -18,7 +18,7 @@
 
 var appRoleEnemyArmature = roleEnemyArmature.extend({
     speed:80,
-    _bullet:null,
+    _bullet:'Bullet1Animation',
     whole_hp:5,
     hp:5,
     hpBox:null,
@@ -38,17 +38,19 @@ var appRoleEnemyArmature = roleEnemyArmature.extend({
         return bullet;
     },
     attack:function(target,index){
+        if(!target) return;
         this._super(target);
         if(!(this.count1%60)){
             if(this.attack_type == GC.ATTACK_TYPE.close){
-                //console.log(123);
+
                 this.getAnimation().play("attack",-1,0);
                 var _this = this;
                 setTimeout(function(){
                     _this._after_attack(target);
-                },800)
+                    GC.TTFLOG.setStr('destroy!--'+Math.random());
+                },800);//todo 时间是攻击间隔
 
-            }else if(this.attack_type == GC.ATTACK_TYPE.far){
+            } else if (this.attack_type == GC.ATTACK_TYPE.far) {
                 this.shoot(target);
                 this._after_attack(target);
             }
@@ -90,7 +92,7 @@ var appRoleEnemyArmature = roleEnemyArmature.extend({
         hpHox.y = this.y+20;
     },
     initHpBox:function(){
-        this.parent.addChild(this.hpProgress(),50);
+        this.parent.addChild(this.hpProgress(),50, 44);
     },
     setHpBox:function(){
         var percent = this.hp*100/this.whole_hp;

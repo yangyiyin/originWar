@@ -73,6 +73,7 @@ var roleEnemyArmature = roleEnemyBaseArmature.extend({
     attack_area:40,
     attack_list:[],
     attack:function(target){
+        if(!target) return;
         if(this._action) this.stopAllActions();
         this._action = false;
         this.is_moving = 0;

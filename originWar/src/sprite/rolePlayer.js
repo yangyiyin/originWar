@@ -8,9 +8,12 @@ var rolePlayerArmature = rolePlayerBaseArmature.extend({
     ctor:function () {
         this._super();
     },
+    speed:80,
     _action:false,
     attack_list:[],
+    watch_list : [],
     attack:function(target){
+        if(!target) return;
         if(this._action) this.stopAllActions();
         this._action = false;
         this.is_moving = 0;

@@ -12,8 +12,8 @@ var appBgLayer = bgLayer.extend({
         this.playBgMusic();
         this.setMusicVolume(0.2);
     },
-    effect_file:res.effect_mp3,
-    background_music : res.background_music_1,
+    effect_file:res.effect2_wav,
+    background_music : res.bg2_mp3,
     bg:function(){
         var sprite = new cc.Sprite(res.bg_png);
         sprite.attr({

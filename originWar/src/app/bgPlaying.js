@@ -9,8 +9,8 @@ var appBgPlayingLayer = bgLayer.extend({
         this._super();
 
     },
-    effect_file:res.effect_mp3,
-    background_music : res.background_music_1,
+    effect_file:res.effect2_wav,
+    background_music : res.bg2_mp3,
     goldLabel:function(){
         var label = new cc.LabelTTF("GOLD:"+GC.INIT_GOLD);
         label.anchorX = 0;

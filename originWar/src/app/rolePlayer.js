@@ -5,12 +5,13 @@
  * Time: 上午9:30
  */
 var appRolePlayerArmature = rolePlayerArmature.extend({
-    hp:30,
-    whole_hp:30,
+    hp:35,
+    whole_hp:35,
     hpBox:null,
     _bullet:null,
     attack_area:180,
     attack_type:GC.ATTACK_TYPE.close,
+    watch_area:280,
     count1 : 0,
     ctor:function () {
         this._super();
@@ -24,17 +25,26 @@ var appRolePlayerArmature = rolePlayerArmature.extend({
         })
         return bullet;
     },
+    doWatch : function() {
+        if (!this.is_attacking && this.watch_list.length) {
+            var x_y_d = CommonFunction.getXYDistanceBy2Point(this,this.watch_list[0]);//x,y的差值数组
+            this.x += (x_y_d.x_d/10000)*this.speed;
+            this.y += (x_y_d.y_d/10000)*this.speed;
 
+        }
+    },
     attack:function(target){
+        if(!target) return;
         this._super(target);
         if(!(this.count1%60)){
             if(this.attack_type == GC.ATTACK_TYPE.close){
                 //console.log(123);
+//                this.getAnimation().setSpeedScale(22);设置攻击速度
                 this.getAnimation().play("attack",-1,0);
                 var _this = this;
                 setTimeout(function(){
                     _this._after_attack(target);
-                },800)
+                },400);
 
             }else if(this.attack_type == GC.ATTACK_TYPE.far){
                 this.shoot(target);

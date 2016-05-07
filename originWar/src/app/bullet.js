@@ -21,6 +21,7 @@ var appBulletArmature = bulletArmature.extend({
         },1000)
     },
     shoot:function(target){
+        if(!target) return;
         var action = new cc.MoveTo(CommonFunction.getDistanceBy2Point(this,target) / this.speed, cc.p(target.x, target.y));
         var action_arr = [];
         action_arr.push(action);
